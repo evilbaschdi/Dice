@@ -85,8 +85,8 @@ namespace Dice
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
             _basics.BrowseFolder();
-            InitialDirectory.Text = Properties.Settings.Default.InitialDirectory;
-            _initialDirectory = Properties.Settings.Default.InitialDirectory;
+            InitialDirectory.Text = _basics.GetInitialDirectory();
+            _initialDirectory = _basics.GetInitialDirectory();
             ValidateForm();
         }
 
