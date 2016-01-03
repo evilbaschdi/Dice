@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Dice.Core;
 using Dice.Internal;
 using MahApps.Metro.Controls;
@@ -21,6 +23,7 @@ namespace Dice
         private readonly IAppBasics _basics;
         private readonly IFilePath _folderPath;
         private string _initialDirectory;
+        private string _path;
 
         public MainWindow()
         {
@@ -29,15 +32,22 @@ namespace Dice
             InitializeComponent();
             _style.Load();
             _folderPath = new FilePath();
-            ValidateForm();
+            Load();
         }
 
-        private void ValidateForm()
+        private void Load()
         {
             ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(Properties.Settings.Default.InitialDirectory) && Directory.Exists(Properties.Settings.Default.InitialDirectory);
 
             _initialDirectory = _basics.GetInitialDirectory();
             InitialDirectory.Text = _initialDirectory;
+
+            ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
+        }
+
+        private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            Process.Start(_path);
         }
 
         private void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
@@ -45,9 +55,9 @@ namespace Dice
             var folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory);
 
             var index = GenerateRandomNumber(0, folderList.Count - 1);
-            var path = folderList[index];
+            _path = folderList[index];
 
-            ThrowTheDiceContent.Text = $"'{path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
+            ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
         }
 
         /// <summary>
@@ -79,7 +89,7 @@ namespace Dice
                 Properties.Settings.Default.Save();
                 _initialDirectory = Properties.Settings.Default.InitialDirectory;
             }
-            ValidateForm();
+            Load();
         }
 
         private void BrowseClick(object sender, RoutedEventArgs e)
@@ -87,7 +97,7 @@ namespace Dice
             _basics.BrowseFolder();
             InitialDirectory.Text = _basics.GetInitialDirectory();
             _initialDirectory = _basics.GetInitialDirectory();
-            ValidateForm();
+            Load();
         }
 
         #region Flyout
