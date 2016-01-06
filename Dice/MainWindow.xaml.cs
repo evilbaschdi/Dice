@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Dice.Core;
 using Dice.Internal;
+using EvilBaschdi.Core.Application;
+using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
 
 // ReSharper disable RedundantExtendsListEntry
@@ -19,17 +21,23 @@ namespace Dice
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private readonly IAppStyle _style;
+        private readonly IMetroStyle _style;
+
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly ISettings _coreSettings;
+
         private readonly IAppBasics _basics;
         private readonly IFilePath _folderPath;
         private string _initialDirectory;
+        private int _overrideProtection;
         private string _path;
 
         public MainWindow()
         {
             _basics = new AppBasics();
-            _style = new AppStyle(this);
+            _coreSettings = new CoreSettings();
             InitializeComponent();
+            _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
             _style.Load();
             _folderPath = new FilePath();
             Load();
@@ -43,6 +51,7 @@ namespace Dice
             InitialDirectory.Text = _initialDirectory;
 
             ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
+            _overrideProtection = 1;
         }
 
         private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
@@ -135,23 +144,35 @@ namespace Dice
 
         #endregion Flyout
 
-        #region Style
+        #region MetroStyle
 
         private void SaveStyleClick(object sender, RoutedEventArgs e)
         {
+            if(_overrideProtection == 0)
+            {
+                return;
+            }
             _style.SaveStyle();
         }
 
         private void Theme(object sender, RoutedEventArgs e)
         {
+            if(_overrideProtection == 0)
+            {
+                return;
+            }
             _style.SetTheme(sender, e);
         }
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(_overrideProtection == 0)
+            {
+                return;
+            }
             _style.SetAccent(sender, e);
         }
 
-        #endregion Style
+        #endregion MetroStyle
     }
 }
