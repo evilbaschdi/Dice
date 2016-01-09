@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="Core\CoreSettings.cs" />
     <Compile Include="Core\IAppBasics.cs" />
+    <Compile Include="Internal\Class1.cs" />
     <Compile Include="Internal\FilePath.cs">
       <DependentUpon>IFilePath.cs</DependentUpon>
     </Compile>

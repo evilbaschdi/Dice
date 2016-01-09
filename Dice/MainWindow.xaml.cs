@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -64,6 +63,7 @@ namespace Dice
             var folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory);
 
             var index = GenerateRandomNumber(0, folderList.Count - 1);
+
             _path = folderList[index];
 
             ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
@@ -77,16 +77,7 @@ namespace Dice
         /// <returns></returns>
         private static int GenerateRandomNumber(int min, int max)
         {
-            var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            // Ein integer benötigt 4 Byte
-            var randomNumber = new byte[4];
-            // dann füllen wir den Array mit zufälligen Bytes
-            rngCryptoServiceProvider.GetBytes(randomNumber);
-            // schließlich wandeln wir den Byte-Array in einen Integer um
-            var result = Math.Abs(BitConverter.ToInt32(randomNumber, 0));
-            // da bis jetzt noch keine Begrenzung der Zahlen vorgenommen wurde,
-            // wird diese Begrenzung mit einer einfachen Modulo-Rechnung hinzu-
-            // gefügt
+            var result = RandomGenerator.Next();
             return result%max + min;
         }
 
