@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,7 +30,9 @@ namespace Dice
         private readonly IFilePath _folderPath;
         private string _initialDirectory;
         private int _overrideProtection;
+        private IList<string> _folderList;
         private string _path;
+        //private readonly List<Debug> _debugList;
 
         public MainWindow()
         {
@@ -39,6 +42,8 @@ namespace Dice
             _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
             _style.Load();
             _folderPath = new FilePath();
+            // -- DEBUG --
+            //_debugList = new List<Debug>();
             Load();
         }
 
@@ -56,15 +61,41 @@ namespace Dice
         private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
             Process.Start(_path);
+
+            // -- DEBUG --
+            //foreach(var pair in _debugList.OrderByDescending(p => p.Calls))
+            //{
+            //    File.AppendAllText(@"C:\temp\debug.txt", $"{pair.Path}: {pair.Calls}{Environment.NewLine}");
+            //}
+            //Process.Start(@"C:\temp\debug.txt");
         }
 
         private void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
-            var folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory);
+            _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory);
 
-            var index = GenerateRandomNumber(0, folderList.Count - 1);
+            // -- DEBUG --
+            //if (_debugList.Count == 0)
+            //{
+            //    foreach(var path in _folderList)
+            //    {
+            //        _debugList.Add(new Debug
+            //        {
+            //            Path = path,
+            //            Calls = 0
+            //        });
+            //    }
+            //}
 
-            _path = folderList[index];
+            var index = GenerateRandomNumber(0, _folderList.Count - 1);
+
+            _path = _folderList[index];
+
+            // -- DEBUG --
+            //foreach (var item in _debugList.Where(item => item.Path == _path))
+            //{
+            //    item.Calls++;
+            //}
 
             ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
         }
