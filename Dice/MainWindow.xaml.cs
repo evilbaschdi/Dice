@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Dice.Core;
 using Dice.Internal;
 using EvilBaschdi.Core.Application;
+using EvilBaschdi.Core.Browsers;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
 
@@ -125,9 +126,13 @@ namespace Dice
 
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
-            _basics.BrowseFolder();
-            InitialDirectory.Text = _basics.GetInitialDirectory();
-            _initialDirectory = _basics.GetInitialDirectory();
+            var browser = new ExplorerFolderBrower
+            {
+                SelectedPath = _initialDirectory
+            };
+            browser.ShowDialog();
+            InitialDirectory.Text = browser.SelectedPath;
+            _initialDirectory = browser.SelectedPath;
             Load();
         }
 
