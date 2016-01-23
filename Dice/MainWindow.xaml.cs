@@ -128,7 +128,7 @@ namespace Dice
         {
             var browser = new ExplorerFolderBrower
             {
-                SelectedPath = _initialDirectory
+                //SelectedPath = _initialDirectory
             };
             browser.ShowDialog();
             InitialDirectory.Text = browser.SelectedPath;
