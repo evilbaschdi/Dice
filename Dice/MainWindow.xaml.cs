@@ -27,7 +27,7 @@ namespace Dice
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly ISettings _coreSettings;
 
-        private readonly IAppBasics _basics;
+        private readonly IAppSettings _appSettings;
         private readonly IFilePath _folderPath;
         private string _initialDirectory;
         private int _overrideProtection;
@@ -37,7 +37,7 @@ namespace Dice
 
         public MainWindow()
         {
-            _basics = new AppBasics();
+            _appSettings = new AppSettings();
             _coreSettings = new CoreSettings();
             InitializeComponent();
             _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
@@ -50,9 +50,9 @@ namespace Dice
 
         private void Load()
         {
-            ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(Properties.Settings.Default.InitialDirectory) && Directory.Exists(Properties.Settings.Default.InitialDirectory);
+            ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory);
 
-            _initialDirectory = _basics.GetInitialDirectory();
+            _initialDirectory = _appSettings.InitialDirectory;
             InitialDirectory.Text = _initialDirectory;
 
             ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
@@ -117,22 +117,19 @@ namespace Dice
         {
             if(Directory.Exists(InitialDirectory.Text))
             {
-                Properties.Settings.Default.InitialDirectory = InitialDirectory.Text;
-                Properties.Settings.Default.Save();
-                _initialDirectory = Properties.Settings.Default.InitialDirectory;
+                _appSettings.InitialDirectory = InitialDirectory.Text;
+                Load();
             }
-            Load();
         }
 
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
             var browser = new ExplorerFolderBrower
             {
-                //SelectedPath = _initialDirectory
+                SelectedPath = _initialDirectory
             };
             browser.ShowDialog();
-            InitialDirectory.Text = browser.SelectedPath;
-            _initialDirectory = browser.SelectedPath;
+            _appSettings.InitialDirectory = browser.SelectedPath;
             Load();
         }
 

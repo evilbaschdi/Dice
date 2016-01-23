@@ -79,11 +79,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\AppBasics.cs">
-      <DependentUpon>IAppBasics.cs</DependentUpon>
+    <Compile Include="Core\AppSettings.cs">
+      <DependentUpon>IAppSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\IAppSettings.cs" />
     <Compile Include="Core\CoreSettings.cs" />
-    <Compile Include="Core\IAppBasics.cs" />
     <Compile Include="Internal\Debug.cs" />
     <Compile Include="Internal\RandomGenerator.cs" />
     <Compile Include="Internal\FilePath.cs">
