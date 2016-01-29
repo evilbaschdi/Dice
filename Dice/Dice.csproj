@@ -86,10 +86,6 @@
     <Compile Include="Core\CoreSettings.cs" />
     <Compile Include="Internal\Debug.cs" />
     <Compile Include="Internal\RandomGenerator.cs" />
-    <Compile Include="Internal\FilePath.cs">
-      <DependentUpon>IFilePath.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Internal\IFilePath.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

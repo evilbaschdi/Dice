@@ -10,6 +10,7 @@ using Dice.Core;
 using Dice.Internal;
 using EvilBaschdi.Core.Application;
 using EvilBaschdi.Core.Browsers;
+using EvilBaschdi.Core.DirectoryExtensions;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
 
@@ -73,7 +74,7 @@ namespace Dice
 
         private void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
-            _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory);
+            _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
 
             // -- DEBUG --
             //if (_debugList.Count == 0)
