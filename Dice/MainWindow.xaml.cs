@@ -11,6 +11,7 @@ using Dice.Internal;
 using EvilBaschdi.Core.Application;
 using EvilBaschdi.Core.Browsers;
 using EvilBaschdi.Core.DirectoryExtensions;
+using EvilBaschdi.Core.MultiThreading;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
 
@@ -34,6 +35,7 @@ namespace Dice
         private int _overrideProtection;
         private IList<string> _folderList;
         private string _path;
+        private readonly IMultiThreadingHelper _multiThreadingHelper;
         //private readonly List<Debug> _debugList;
 
         public MainWindow()
@@ -43,7 +45,8 @@ namespace Dice
             InitializeComponent();
             _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
             _style.Load();
-            _folderPath = new FilePath();
+            _multiThreadingHelper = new MultiThreadingHelper();
+            _folderPath = new FilePath(_multiThreadingHelper);
             // -- DEBUG --
             //_debugList = new List<Debug>();
             Load();
@@ -116,7 +119,7 @@ namespace Dice
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
-            if(Directory.Exists(InitialDirectory.Text))
+            if (Directory.Exists(InitialDirectory.Text))
             {
                 _appSettings.InitialDirectory = InitialDirectory.Text;
                 Load();
@@ -126,9 +129,9 @@ namespace Dice
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
             var browser = new ExplorerFolderBrower
-            {
-                SelectedPath = _initialDirectory
-            };
+                          {
+                              SelectedPath = _initialDirectory
+                          };
             browser.ShowDialog();
             _appSettings.InitialDirectory = browser.SelectedPath;
             Load();
@@ -144,20 +147,20 @@ namespace Dice
         private void ToggleFlyout(int index, bool stayOpen = false)
         {
             var activeFlyout = (Flyout) Flyouts.Items[index];
-            if(activeFlyout == null)
+            if (activeFlyout == null)
             {
                 return;
             }
 
-            foreach(
+            foreach (
                 var nonactiveFlyout in
                     Flyouts.Items.Cast<Flyout>()
-                        .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
+                           .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
             {
                 nonactiveFlyout.IsOpen = false;
             }
 
-            if(activeFlyout.IsOpen && stayOpen)
+            if (activeFlyout.IsOpen && stayOpen)
             {
                 activeFlyout.IsOpen = true;
             }
@@ -173,7 +176,7 @@ namespace Dice
 
         private void SaveStyleClick(object sender, RoutedEventArgs e)
         {
-            if(_overrideProtection == 0)
+            if (_overrideProtection == 0)
             {
                 return;
             }
@@ -182,7 +185,7 @@ namespace Dice
 
         private void Theme(object sender, RoutedEventArgs e)
         {
-            if(_overrideProtection == 0)
+            if (_overrideProtection == 0)
             {
                 return;
             }
@@ -191,7 +194,7 @@ namespace Dice
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(_overrideProtection == 0)
+            if (_overrideProtection == 0)
             {
                 return;
             }
