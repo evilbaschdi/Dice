@@ -35,7 +35,6 @@ namespace Dice
         private int _overrideProtection;
         private IList<string> _folderList;
         private string _path;
-        private readonly IMultiThreadingHelper _multiThreadingHelper;
         //private readonly List<Debug> _debugList;
 
         public MainWindow()
@@ -45,8 +44,8 @@ namespace Dice
             InitializeComponent();
             _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
             _style.Load();
-            _multiThreadingHelper = new MultiThreadingHelper();
-            _folderPath = new FilePath(_multiThreadingHelper);
+            var multiThreadingHelper = new MultiThreadingHelper();
+            _folderPath = new FilePath(multiThreadingHelper);
             // -- DEBUG --
             //_debugList = new List<Debug>();
             Load();
