@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shell;
 using Dice.Core;
 using Dice.Internal;
 using EvilBaschdi.Core.Application;
@@ -35,6 +37,9 @@ namespace Dice
         private int _overrideProtection;
         private IList<string> _folderList;
         private string _path;
+        private readonly BackgroundWorker _bw;
+        private string _result;
+        private int _executionCount;
         //private readonly List<Debug> _debugList;
 
         public MainWindow()
@@ -42,6 +47,7 @@ namespace Dice
             _appSettings = new AppSettings();
             _coreSettings = new CoreSettings();
             InitializeComponent();
+            _bw = new BackgroundWorker();
             _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
             _style.Load();
             var multiThreadingHelper = new MultiThreadingHelper();
@@ -76,6 +82,33 @@ namespace Dice
 
         private void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
+            ConfigureDice();
+        }
+
+        private void ConfigureDice()
+        {
+            _executionCount++;
+            Cursor = Cursors.Wait;
+            if (_executionCount == 1)
+            {
+                _bw.DoWork += (o, args) => Dice();
+                _bw.WorkerReportsProgress = true;
+                _bw.RunWorkerCompleted += BackgroundWorkerRunWorkerCompleted;
+            }
+            _bw.RunWorkerAsync();
+        }
+
+        private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ThrowTheDiceContent.Text = _result;
+
+            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+            Cursor = Cursors.Arrow;
+        }
+
+        private void Dice()
+        {
             _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
 
             // -- DEBUG --
@@ -100,8 +133,7 @@ namespace Dice
             //{
             //    item.Calls++;
             //}
-
-            ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
+            _result = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
         }
 
         /// <summary>

@@ -24,6 +24,10 @@
             </Button>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
+     <!-- TaskbarItemInfo -->
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
     <!-- Grid -->
     <Grid>
         <!-- Browse -->
