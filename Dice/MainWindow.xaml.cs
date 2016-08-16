@@ -13,7 +13,7 @@ using Dice.Internal;
 using EvilBaschdi.Core.Application;
 using EvilBaschdi.Core.Browsers;
 using EvilBaschdi.Core.DirectoryExtensions;
-using EvilBaschdi.Core.MultiThreading;
+using EvilBaschdi.Core.Threading;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
 
@@ -185,8 +185,8 @@ namespace Dice
 
             foreach (
                 var nonactiveFlyout in
-                    Flyouts.Items.Cast<Flyout>()
-                           .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
+                Flyouts.Items.Cast<Flyout>()
+                       .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
             {
                 nonactiveFlyout.IsOpen = false;
             }
