@@ -159,7 +159,7 @@ namespace Dice
 
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
-            var browser = new ExplorerFolderBrower
+            var browser = new ExplorerFolderBrowser
                           {
                               SelectedPath = _initialDirectory
                           };
