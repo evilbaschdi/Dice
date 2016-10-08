@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -48,8 +50,10 @@ namespace Dice
             _coreSettings = new CoreSettings();
             InitializeComponent();
             _bw = new BackgroundWorker();
-            _style = new MetroStyle(this, Accent, Dark, Light, _coreSettings);
-            _style.Load();
+            _style = new MetroStyle(this, Accent, ThemeSwitch, _coreSettings);
+            _style.Load(true);
+            var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
+            LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
             var multiThreadingHelper = new MultiThreadingHelper();
             _folderPath = new FilePath(multiThreadingHelper);
             // -- DEBUG --
@@ -177,7 +181,7 @@ namespace Dice
 
         private void ToggleFlyout(int index, bool stayOpen = false)
         {
-            var activeFlyout = (Flyout) Flyouts.Items[index];
+            var activeFlyout = (Flyout)Flyouts.Items[index];
             if (activeFlyout == null)
             {
                 return;
@@ -214,13 +218,21 @@ namespace Dice
             _style.SaveStyle();
         }
 
-        private void Theme(object sender, RoutedEventArgs e)
+        private void Theme(object sender, EventArgs e)
         {
             if (_overrideProtection == 0)
             {
                 return;
             }
-            _style.SetTheme(sender, e);
+            var routedEventArgs = e as RoutedEventArgs;
+            if (routedEventArgs != null)
+            {
+                _style.SetTheme(sender, routedEventArgs);
+            }
+            else
+            {
+                _style.SetTheme(sender);
+            }
         }
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
