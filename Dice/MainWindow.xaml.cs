@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,18 +39,16 @@ namespace Dice
         private int _overrideProtection;
         private IList<string> _folderList;
         private string _path;
-        private readonly BackgroundWorker _bw;
         private string _result;
-        private int _executionCount;
         //private readonly List<Debug> _debugList;
 
         public MainWindow()
         {
-            _appSettings = new AppSettings();
-            _coreSettings = new CoreSettings();
             InitializeComponent();
-            _bw = new BackgroundWorker();
-            _style = new MetroStyle(this, Accent, ThemeSwitch, _coreSettings);
+            _appSettings = new AppSettings();
+            _coreSettings = new CoreSettings(Properties.Settings.Default);
+            var themeManagerHelper = new ThemeManagerHelper();
+            _style = new MetroStyle(this, Accent, ThemeSwitch, _coreSettings, themeManagerHelper);
             _style.Load(true);
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
@@ -84,34 +82,49 @@ namespace Dice
             //Process.Start(@"C:\temp\debug.txt");
         }
 
-        private void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
+
+        //private async void buttonAsync_Click(object sender, RoutedEventArgs e)
+        //{
+        //    buttonAsync.IsEnabled = false;
+
+        //    var slowTask = Task<string>.Factory.StartNew(() => SlowDude());
+
+        //    textBoxResults.Text += "Doing other things while waiting for that slow dude...\r\n";
+
+        //    await slowTask;
+
+        //    textBoxResults.Text += slowTask.Result.ToString();
+
+        //    buttonAsync.IsEnabled = true;
+        //}
+
+        //private string SlowDude()
+        //{
+        //    Thread.Sleep(2000);
+        //    return "Ta-dam! Here I am!\r\n";
+        //}
+
+
+        private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
+        {
+            await RunDiceAsync();
+        }
+
+        private async Task RunDiceAsync()
         {
             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
-            ConfigureDice();
-        }
-
-        private void ConfigureDice()
-        {
-            _executionCount++;
             Cursor = Cursors.Wait;
-            if (_executionCount == 1)
-            {
-                _bw.DoWork += (o, args) => Dice();
-                _bw.WorkerReportsProgress = true;
-                _bw.RunWorkerCompleted += BackgroundWorkerRunWorkerCompleted;
-            }
-            _bw.RunWorkerAsync();
-        }
 
-        private void BackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            ThrowTheDiceContent.Text = _result;
+            var task = Task<string>.Factory.StartNew(Dice);
+            await task;
+
+            ThrowTheDiceContent.Text = task.Result;
 
             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             Cursor = Cursors.Arrow;
         }
 
-        private void Dice()
+        private string Dice()
         {
             _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
 
@@ -138,6 +151,7 @@ namespace Dice
             //    item.Calls++;
             //}
             _result = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
+            return _result;
         }
 
         /// <summary>
@@ -149,7 +163,7 @@ namespace Dice
         private static int GenerateRandomNumber(int min, int max)
         {
             var result = RandomGenerator.Next();
-            return result%max + min;
+            return result % max + min;
         }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
@@ -181,7 +195,7 @@ namespace Dice
 
         private void ToggleFlyout(int index, bool stayOpen = false)
         {
-            var activeFlyout = (Flyout)Flyouts.Items[index];
+            var activeFlyout = (Flyout) Flyouts.Items[index];
             if (activeFlyout == null)
             {
                 return;
