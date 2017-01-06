@@ -39,7 +39,6 @@ namespace Dice
         private int _overrideProtection;
         private IList<string> _folderList;
         private string _path;
-        private string _result;
         //private readonly List<Debug> _debugList;
 
         public MainWindow()
@@ -150,8 +149,7 @@ namespace Dice
             //{
             //    item.Calls++;
             //}
-            _result = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
-            return _result;
+            return $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
         }
 
         /// <summary>
