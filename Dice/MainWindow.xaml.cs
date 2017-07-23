@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Shell;
 using Dice.Core;
 using Dice.Internal;
+using Dice.Properties;
 using EvilBaschdi.Core.Application;
 using EvilBaschdi.Core.Browsers;
 using EvilBaschdi.Core.DirectoryExtensions;
@@ -28,16 +30,18 @@ namespace Dice
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private readonly IMetroStyle _style;
+        private readonly IAppSettings _appSettings;
 
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly ISettings _coreSettings;
 
-        private readonly IAppSettings _appSettings;
+        private readonly IDialogService _dialogService;
         private readonly IFilePath _folderPath;
+        private readonly IMetroStyle _style;
+        private IList<string> _folderList;
         private string _initialDirectory;
         private int _overrideProtection;
-        private IList<string> _folderList;
+
         private string _path;
         //private readonly List<Debug> _debugList;
 
@@ -45,7 +49,7 @@ namespace Dice
         {
             InitializeComponent();
             _appSettings = new AppSettings();
-            _coreSettings = new CoreSettings(Properties.Settings.Default);
+            _coreSettings = new CoreSettings(Settings.Default);
             var themeManagerHelper = new ThemeManagerHelper();
             _style = new MetroStyle(this, Accent, ThemeSwitch, _coreSettings, themeManagerHelper);
             _style.Load(true);
@@ -53,6 +57,8 @@ namespace Dice
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
             var multiThreadingHelper = new MultiThreadingHelper();
             _folderPath = new FilePath(multiThreadingHelper);
+            _dialogService = new DialogService(this);
+
             // -- DEBUG --
             //_debugList = new List<Debug>();
             Load();
@@ -106,7 +112,8 @@ namespace Dice
 
         private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
-            await RunDiceAsync();
+            // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
+            await RunDiceAsync().ConfigureAwait(true);
         }
 
         private async Task RunDiceAsync()
@@ -115,7 +122,7 @@ namespace Dice
             Cursor = Cursors.Wait;
 
             var task = Task<string>.Factory.StartNew(Dice);
-            await task;
+            await task.ConfigureAwait(true);
 
             ThrowTheDiceContent.Text = task.Result;
 
@@ -127,28 +134,12 @@ namespace Dice
         {
             _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
 
-            // -- DEBUG --
-            //if (_debugList.Count == 0)
-            //{
-            //    foreach(var path in _folderList)
-            //    {
-            //        _debugList.Add(new Debug
-            //        {
-            //            Path = path,
-            //            Calls = 0
-            //        });
-            //    }
-            //}
 
-            var index = GenerateRandomNumber(0, _folderList.Count - 1);
+            var index = GenerateRandomNumber(0, _folderList.Count);
+
 
             _path = _folderList[index];
 
-            // -- DEBUG --
-            //foreach (var item in _debugList.Where(item => item.Path == _path))
-            //{
-            //    item.Calls++;
-            //}
             return $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
         }
 
@@ -215,6 +206,24 @@ namespace Dice
             {
                 activeFlyout.IsOpen = !activeFlyout.IsOpen;
             }
+        }
+
+        private void GetReferencedVersions(object sender, MouseButtonEventArgs e)
+        {
+            var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(ra => ra.Name.Equals("MahApps.Metro") || ra.Name.Equals("EvilBaschdi.Core"));
+            //EvilBaschdi.Core
+            //MahApps.Metro
+            //MahApps.Metro.IconPacks
+
+            var versionStringBuilder = new StringBuilder();
+
+            foreach (var referencedAssembly in referencedAssemblies)
+            {
+                versionStringBuilder.AppendLine($"{referencedAssembly.Name}: {referencedAssembly.Version}");
+            }
+
+
+            _dialogService.ShowMessage("Referenced Versions", versionStringBuilder.ToString());
         }
 
         #endregion Flyout

@@ -81,8 +81,8 @@
                     </StackPanel>
                     <!-- Build / Linker Time -->
                     <StackPanel Orientation="Horizontal">
-                        <Label Width="50" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Build" />
-                        <Label Width="310" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="LinkerTime" />
+                        <Label Width="50" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Build" MouseDoubleClick="GetReferencedVersions"/>
+                        <Label Width="310" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="LinkerTime" MouseDoubleClick="GetReferencedVersions"/>
                     </StackPanel>
                 </StackPanel>
             </controls:Flyout>
