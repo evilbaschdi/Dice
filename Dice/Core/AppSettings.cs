@@ -1,19 +1,20 @@
+using Dice.Properties;
+
 namespace Dice.Core
 {
+    /// <inheritdoc />
     public class AppSettings : IAppSettings
     {
+        /// <inheritdoc />
         public string InitialDirectory
         {
-            get
-            {
-                return string.IsNullOrWhiteSpace(Properties.Settings.Default.InitialDirectory)
-                    ? ""
-                    : Properties.Settings.Default.InitialDirectory;
-            }
+            get => string.IsNullOrWhiteSpace(Settings.Default.InitialDirectory)
+                ? ""
+                : Settings.Default.InitialDirectory;
             set
             {
-                Properties.Settings.Default.InitialDirectory = value;
-                Properties.Settings.Default.Save();
+                Settings.Default.InitialDirectory = value;
+                Settings.Default.Save();
             }
         }
     }

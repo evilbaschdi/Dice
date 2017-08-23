@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,33 +26,29 @@ using MahApps.Metro.Controls;
 
 namespace Dice
 {
+    /// <inheritdoc cref="MetroWindow" />
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
-
-        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private readonly ISettings _coreSettings;
-
         private readonly IDialogService _dialogService;
         private readonly IFilePath _folderPath;
         private readonly IMetroStyle _style;
         private IList<string> _folderList;
         private string _initialDirectory;
         private int _overrideProtection;
-
         private string _path;
-        //private readonly List<Debug> _debugList;
 
+        /// <inheritdoc />
         public MainWindow()
         {
             InitializeComponent();
             _appSettings = new AppSettings();
-            _coreSettings = new CoreSettings(Settings.Default);
+            ISettings coreSettings = new CoreSettings(Settings.Default);
             var themeManagerHelper = new ThemeManagerHelper();
-            _style = new MetroStyle(this, Accent, ThemeSwitch, _coreSettings, themeManagerHelper);
+            _style = new MetroStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
             _style.Load(true);
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
@@ -59,8 +56,6 @@ namespace Dice
             _folderPath = new FilePath(multiThreadingHelper);
             _dialogService = new DialogService(this);
 
-            // -- DEBUG --
-            //_debugList = new List<Debug>();
             Load();
         }
 
@@ -78,37 +73,7 @@ namespace Dice
         private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
             Process.Start(_path);
-
-            // -- DEBUG --
-            //foreach(var pair in _debugList.OrderByDescending(p => p.Calls))
-            //{
-            //    File.AppendAllText(@"C:\temp\debug.txt", $"{pair.Path}: {pair.Calls}{Environment.NewLine}");
-            //}
-            //Process.Start(@"C:\temp\debug.txt");
         }
-
-
-        //private async void buttonAsync_Click(object sender, RoutedEventArgs e)
-        //{
-        //    buttonAsync.IsEnabled = false;
-
-        //    var slowTask = Task<string>.Factory.StartNew(() => SlowDude());
-
-        //    textBoxResults.Text += "Doing other things while waiting for that slow dude...\r\n";
-
-        //    await slowTask;
-
-        //    textBoxResults.Text += slowTask.Result.ToString();
-
-        //    buttonAsync.IsEnabled = true;
-        //}
-
-        //private string SlowDude()
-        //{
-        //    Thread.Sleep(2000);
-        //    return "Ta-dam! Here I am!\r\n";
-        //}
-
 
         private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
@@ -134,25 +99,15 @@ namespace Dice
         {
             _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
 
+            var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomGenerator = new RandomGenerator(rngCryptoServiceProvider);
 
-            var index = GenerateRandomNumber(0, _folderList.Count);
+            var index = randomGenerator.ValueFor(0, _folderList.Count);
 
 
             _path = _folderList[index];
 
             return $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
-        }
-
-        /// <summary>
-        ///     because random is not random enough.
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        /// <returns></returns>
-        private static int GenerateRandomNumber(int min, int max)
-        {
-            var result = RandomGenerator.Next();
-            return result % max + min;
         }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
@@ -245,15 +200,8 @@ namespace Dice
             {
                 return;
             }
-            var routedEventArgs = e as RoutedEventArgs;
-            if (routedEventArgs != null)
-            {
-                _style.SetTheme(sender, routedEventArgs);
-            }
-            else
-            {
-                _style.SetTheme(sender);
-            }
+
+            _style.SetTheme(sender);
         }
 
         private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -262,6 +210,7 @@ namespace Dice
             {
                 return;
             }
+
             _style.SetAccent(sender, e);
         }
 
