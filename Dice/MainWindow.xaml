@@ -6,6 +6,7 @@
                       ResizeMode="CanMinimize" GlowBrush="{DynamicResource AccentColorBrush}"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                      xmlns:iconPackConverter="clr-namespace:Dice.Core.PackIconImageSourceConverter"
                       mc:Ignorable="d" Icon="plainicon.ico" ShowIconOnTitleBar="False"
                       Title="Dice" Height="250" Width="500" TitleCharacterCasing="Normal">
     <!--  RightWindowCommands  -->
@@ -22,7 +23,15 @@
     </controls:MetroWindow.RightWindowCommands>
     <!-- TaskbarItemInfo -->
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo />
+        <TaskbarItemInfo>
+            <TaskbarItemInfo.ThumbButtonInfos>
+                <ThumbButtonInfoCollection>
+                    <ThumbButtonInfo
+                        ImageSource="{Binding Source={x:Static iconPacks:PackIconMaterialKind.CubeOutline}, Converter={iconPackConverter:PackIconMaterialImageSourceConverter}, ConverterParameter={StaticResource TextBrush}}"
+                        Click="ThumbButtonInfoBrowseClick" />
+                </ThumbButtonInfoCollection>
+            </TaskbarItemInfo.ThumbButtonInfos>
+        </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
     <!-- Grid -->
     <Grid>
@@ -81,8 +90,8 @@
                     </StackPanel>
                     <!-- Build / Linker Time -->
                     <StackPanel Orientation="Horizontal">
-                        <Label Width="50" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Build" MouseDoubleClick="GetReferencedVersions"/>
-                        <Label Width="310" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="LinkerTime" MouseDoubleClick="GetReferencedVersions"/>
+                        <Label Width="50" Margin="10,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Build" MouseDoubleClick="GetReferencedVersions" />
+                        <Label Width="310" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="LinkerTime" MouseDoubleClick="GetReferencedVersions" />
                     </StackPanel>
                 </StackPanel>
             </controls:Flyout>

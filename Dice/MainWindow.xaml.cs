@@ -21,6 +21,7 @@ using EvilBaschdi.Core.DirectoryExtensions;
 using EvilBaschdi.Core.Threading;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
 
 // ReSharper disable RedundantExtendsListEntry
 
@@ -45,6 +46,7 @@ namespace Dice
         public MainWindow()
         {
             InitializeComponent();
+            
             _appSettings = new AppSettings();
             ISettings coreSettings = new CoreSettings(Settings.Default);
             var themeManagerHelper = new ThemeManagerHelper();
@@ -76,6 +78,12 @@ namespace Dice
         }
 
         private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
+        {
+            // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
+            await RunDiceAsync().ConfigureAwait(true);
+        }
+
+        private async void ThumbButtonInfoBrowseClick(object sender, EventArgs e)
         {
             // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
             await RunDiceAsync().ConfigureAwait(true);
@@ -118,6 +126,7 @@ namespace Dice
                 Load();
             }
         }
+
 
         private void BrowseClick(object sender, RoutedEventArgs e)
         {
