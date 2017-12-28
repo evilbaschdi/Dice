@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +19,6 @@ using EvilBaschdi.Core.DirectoryExtensions;
 using EvilBaschdi.Core.Threading;
 using EvilBaschdi.Core.Wpf;
 using MahApps.Metro.Controls;
-using MahApps.Metro.IconPacks;
 
 // ReSharper disable RedundantExtendsListEntry
 
@@ -35,9 +32,9 @@ namespace Dice
     {
         private readonly IAppSettings _appSettings;
         private readonly IDialogService _dialogService;
-        private readonly IFilePath _folderPath;
         private readonly IMetroStyle _style;
-        private IList<string> _folderList;
+        private readonly IDicePath _dicePath;
+
         private string _initialDirectory;
         private int _overrideProtection;
         private string _path;
@@ -46,16 +43,19 @@ namespace Dice
         public MainWindow()
         {
             InitializeComponent();
-            
+
             _appSettings = new AppSettings();
             ISettings coreSettings = new CoreSettings(Settings.Default);
-            var themeManagerHelper = new ThemeManagerHelper();
+            IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
+            IMultiThreadingHelper multiThreadingHelper = new MultiThreadingHelper();
+            IFilePath filePath = new FilePath(multiThreadingHelper);
+            _dicePath = new DicePath(filePath);
             _style = new MetroStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
             _style.Load(true);
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
-            var multiThreadingHelper = new MultiThreadingHelper();
-            _folderPath = new FilePath(multiThreadingHelper);
+
+
             _dialogService = new DialogService(this);
 
             Load();
@@ -94,29 +94,15 @@ namespace Dice
             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
             Cursor = Cursors.Wait;
 
-            var task = Task<string>.Factory.StartNew(Dice);
+            var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
             await task.ConfigureAwait(true);
-
-            ThrowTheDiceContent.Text = task.Result;
+            _path = task.Result;
+            ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
 
             TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
             Cursor = Cursors.Arrow;
         }
 
-        private string Dice()
-        {
-            _folderList = _folderPath.GetSubdirectoriesContainingOnlyFiles(_initialDirectory).ToList();
-
-            var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomGenerator = new RandomGenerator(rngCryptoServiceProvider);
-
-            var index = randomGenerator.ValueFor(0, _folderList.Count);
-
-
-            _path = _folderList[index];
-
-            return $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
-        }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
