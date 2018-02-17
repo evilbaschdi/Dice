@@ -3,12 +3,11 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
-using MahApps.Metro.IconPacks;
 
 namespace Dice.Core.PackIconImageSourceConverter
 {
     /// <summary>
-    ///     Converts a <see cref="PackIcon{TKind}" /> to an ImageSource.
+    ///     Converts a PackIcon to an ImageSource.
     ///     Use the ConverterParameter to pass a Brush.
     /// </summary>
     public abstract class PackIconImageSourceConverterBase<TKind> : MarkupExtension, IValueConverter

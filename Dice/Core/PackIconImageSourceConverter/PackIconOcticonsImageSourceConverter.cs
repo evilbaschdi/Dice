@@ -1,8 +1,7 @@
 using System.Windows.Media;
-using Dice.Core.PackIconImageSourceConverter;
 using MahApps.Metro.IconPacks;
 
-namespace Dice.Core
+namespace Dice.Core.PackIconImageSourceConverter
 {
     /// <summary>
     /// </summary>

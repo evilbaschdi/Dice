@@ -13,11 +13,12 @@ using System.Windows.Shell;
 using Dice.Core;
 using Dice.Internal;
 using Dice.Properties;
-using EvilBaschdi.Core.Application;
-using EvilBaschdi.Core.Browsers;
-using EvilBaschdi.Core.DirectoryExtensions;
-using EvilBaschdi.Core.Threading;
-using EvilBaschdi.Core.Wpf;
+using EvilBaschdi.Core.Extensions;
+using EvilBaschdi.Core.Internal;
+using EvilBaschdi.CoreExtended;
+using EvilBaschdi.CoreExtended.AppHelpers;
+using EvilBaschdi.CoreExtended.Browsers;
+using EvilBaschdi.CoreExtended.Metro;
 using MahApps.Metro.Controls;
 
 // ReSharper disable RedundantExtendsListEntry
@@ -32,7 +33,7 @@ namespace Dice
     {
         private readonly IAppSettings _appSettings;
         private readonly IDialogService _dialogService;
-        private readonly IMetroStyle _style;
+        private readonly IApplicationStyle _style;
         private readonly IDicePath _dicePath;
 
         private string _initialDirectory;
@@ -44,13 +45,15 @@ namespace Dice
         {
             InitializeComponent();
 
-            _appSettings = new AppSettings();
-            ISettings coreSettings = new CoreSettings(Settings.Default);
+            
+            IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
+            IApplicationStyleSettings coreSettings = new ApplicationStyleSettings(appSettingsBase);
             IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
-            IMultiThreadingHelper multiThreadingHelper = new MultiThreadingHelper();
-            IFilePath filePath = new FilePath(multiThreadingHelper);
+            IMultiThreading multiThreadingHelper = new MultiThreading();
+            IFileListFromPath filePath = new FileListFromPath(multiThreadingHelper);
+            _appSettings = new AppSettings(appSettingsBase);
             _dicePath = new DicePath(filePath);
-            _style = new MetroStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
+            _style = new ApplicationStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
             _style.Load(true);
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
@@ -186,6 +189,7 @@ namespace Dice
             {
                 return;
             }
+
             _style.SaveStyle();
         }
 

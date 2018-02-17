@@ -1,5 +1,5 @@
 ﻿using System;
-using EvilBaschdi.Core.DotNetExtensions;
+using EvilBaschdi.Core;
 
 namespace Dice.Internal
 {

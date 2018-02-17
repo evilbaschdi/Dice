@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using EvilBaschdi.Core.DirectoryExtensions;
+using EvilBaschdi.Core.Internal;
 
 namespace Dice.Internal
 {
     /// <inheritdoc />
     public class DicePath : IDicePath
     {
-        private readonly IFilePath _filePath;
+        private readonly IFileListFromPath _filePath;
 
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="filePath"></param>
-        public DicePath(IFilePath filePath)
+        public DicePath(IFileListFromPath filePath)
         {
             _filePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }
@@ -43,6 +42,4 @@ namespace Dice.Internal
             return GetPath;
         }
     }
-
-    
 }
