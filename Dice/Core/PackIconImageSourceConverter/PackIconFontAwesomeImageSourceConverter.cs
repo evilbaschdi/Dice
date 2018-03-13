@@ -3,10 +3,12 @@ using MahApps.Metro.IconPacks;
 
 namespace Dice.Core.PackIconImageSourceConverter
 {
+    /// <inheritdoc />
     /// <summary>
     /// </summary>
     public class PackIconFontAwesomeImageSourceConverter : PackIconImageSourceConverterBase<PackIconFontAwesomeKind>
     {
+        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="value"></param>

@@ -6,6 +6,8 @@ using System.Windows.Media;
 
 namespace Dice.Core.PackIconImageSourceConverter
 {
+    /// <inheritdoc cref="IValueConverter" />
+    /// <inheritdoc cref="MarkupExtension" />
     /// <summary>
     ///     Converts a PackIcon to an ImageSource.
     ///     Use the ConverterParameter to pass a Brush.
@@ -17,6 +19,7 @@ namespace Dice.Core.PackIconImageSourceConverter
         /// </summary>
         private double Thickness { get; set; } = 0.25;
 
+        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="value"></param>
@@ -35,6 +38,7 @@ namespace Dice.Core.PackIconImageSourceConverter
             return CreateImageSource(value, foregroundBrush, Thickness);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="value"></param>
@@ -47,6 +51,7 @@ namespace Dice.Core.PackIconImageSourceConverter
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// </summary>
         /// <param name="serviceProvider"></param>

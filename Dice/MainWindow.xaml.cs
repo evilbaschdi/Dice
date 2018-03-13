@@ -10,8 +10,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
+using System.Xml.Serialization;
 using Dice.Core;
 using Dice.Internal;
+using Dice.Model;
 using Dice.Properties;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
@@ -45,7 +47,7 @@ namespace Dice
         {
             InitializeComponent();
 
-            
+
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
             IApplicationStyleSettings coreSettings = new ApplicationStyleSettings(appSettingsBase);
             IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
@@ -163,18 +165,18 @@ namespace Dice
 
         private void GetReferencedVersions(object sender, MouseButtonEventArgs e)
         {
-            var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies().Where(ra => ra.Name.Equals("MahApps.Metro") || ra.Name.Equals("EvilBaschdi.Core"));
-            //EvilBaschdi.Core
-            //MahApps.Metro
-            //MahApps.Metro.IconPacks
-
             var versionStringBuilder = new StringBuilder();
 
-            foreach (var referencedAssembly in referencedAssemblies)
+            var serializer = new XmlSerializer(typeof(Packages));
+            using (var fileStream = new FileStream("packages.config", FileMode.Open))
             {
-                versionStringBuilder.AppendLine($"{referencedAssembly.Name}: {referencedAssembly.Version}");
-            }
+                var packages = (Packages) serializer.Deserialize(fileStream);
 
+                foreach (var package in packages.List.Where(ra => ra.Id.StartsWith("MahApps.Metro") || ra.Id.StartsWith("EvilBaschdi.Core")))
+                {
+                    versionStringBuilder.AppendLine($"{package.Id}: {package.Version}");
+                }
+            }
 
             _dialogService.ShowMessage("Referenced Versions", versionStringBuilder.ToString());
         }
