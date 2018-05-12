@@ -4,20 +4,16 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
-using System.Xml.Serialization;
 using Dice.Core;
 using Dice.Internal;
-using Dice.Model;
 using Dice.Properties;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
-using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
 using EvilBaschdi.CoreExtended.Metro;
@@ -34,7 +30,7 @@ namespace Dice
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
-        private readonly IDialogService _dialogService;
+
         private readonly IApplicationStyle _style;
         private readonly IDicePath _dicePath;
 
@@ -60,8 +56,6 @@ namespace Dice
             var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
             LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
 
-
-            _dialogService = new DialogService(this);
 
             Load();
         }
@@ -163,23 +157,23 @@ namespace Dice
             }
         }
 
-        private void GetReferencedVersions(object sender, MouseButtonEventArgs e)
-        {
-            var versionStringBuilder = new StringBuilder();
+        //private void GetReferencedVersions(object sender, MouseButtonEventArgs e)
+        //{
+        //    var versionStringBuilder = new StringBuilder();
 
-            var serializer = new XmlSerializer(typeof(Packages));
-            using (var fileStream = new FileStream("packages.config", FileMode.Open))
-            {
-                var packages = (Packages) serializer.Deserialize(fileStream);
+        //    var serializer = new XmlSerializer(typeof(Packages));
+        //    using (var fileStream = new FileStream("packages.config", FileMode.Open))
+        //    {
+        //        var packages = (Packages) serializer.Deserialize(fileStream);
 
-                foreach (var package in packages.List.Where(ra => ra.Id.StartsWith("MahApps.Metro") || ra.Id.StartsWith("EvilBaschdi.Core")))
-                {
-                    versionStringBuilder.AppendLine($"{package.Id}: {package.Version}");
-                }
-            }
+        //        foreach (var package in packages.List.Where(ra => ra.Id.StartsWith("MahApps.Metro") || ra.Id.StartsWith("EvilBaschdi.Core")))
+        //        {
+        //            versionStringBuilder.AppendLine($"{package.Id}: {package.Version}");
+        //        }
+        //    }
 
-            _dialogService.ShowMessage("Referenced Versions", versionStringBuilder.ToString());
-        }
+        //    _dialogService.ShowMessage("Referenced Versions", versionStringBuilder.ToString());
+        //}
 
         #endregion Flyout
 
