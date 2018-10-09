@@ -17,7 +17,7 @@ namespace Dice.Core.PackIconImageSourceConverter
         /// <summary>
         ///     Gets or sets the thickness to draw the icon with.
         /// </summary>
-        private double Thickness { get; set; } = 0.25;
+        private double Thickness { get; } = 0.25;
 
         /// <inheritdoc />
         /// <summary>

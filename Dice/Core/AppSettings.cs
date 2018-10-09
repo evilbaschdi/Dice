@@ -7,8 +7,9 @@ namespace Dice.Core
     public class AppSettings : IAppSettings
     {
         private readonly IAppSettingsBase _appSettingsBase;
+
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="appSettingsBase"></param>
         public AppSettings(IAppSettingsBase appSettingsBase)

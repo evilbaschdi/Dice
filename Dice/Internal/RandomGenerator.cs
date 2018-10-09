@@ -27,6 +27,7 @@ namespace Dice.Internal
                 {
                     return inst.Next();
                 }
+
                 var buffer = new byte[4];
                 _rngCryptoServiceProvider.GetBytes(buffer);
                 _local = inst = new Random(BitConverter.ToInt32(buffer, 0));

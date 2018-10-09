@@ -1,11 +1,16 @@
 using System.Windows.Media;
 using MahApps.Metro.IconPacks;
 
+// ReSharper disable CommentTypo
+// ReSharper disable StringLiteralTypo
+// ReSharper disable once IdentifierTypo
+// ReSharper disable IdentifierTypo
 namespace Dice.Core.PackIconImageSourceConverter
 {
     /// <inheritdoc />
     /// <summary>
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     public class PackIconEntypoImageSourceConverter : PackIconImageSourceConverterBase<PackIconEntypoKind>
     {
         /// <inheritdoc />

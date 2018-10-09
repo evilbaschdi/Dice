@@ -30,9 +30,9 @@ namespace Dice
     public partial class MainWindow : MetroWindow
     {
         private readonly IAppSettings _appSettings;
+        private readonly IDicePath _dicePath;
 
         private readonly IApplicationStyle _style;
-        private readonly IDicePath _dicePath;
 
         private string _initialDirectory;
         private int _overrideProtection;
@@ -105,11 +105,13 @@ namespace Dice
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(InitialDirectory.Text))
+            if (!Directory.Exists(InitialDirectory.Text))
             {
-                _appSettings.InitialDirectory = InitialDirectory.Text;
-                Load();
+                return;
             }
+
+            _appSettings.InitialDirectory = InitialDirectory.Text;
+            Load();
         }
 
 
@@ -126,54 +128,36 @@ namespace Dice
 
         #region Flyout
 
-        private void ToggleSettingsFlyoutClick(object sender, RoutedEventArgs e)
+        private void ToggleSettingsFlyOutClick(object sender, RoutedEventArgs e)
         {
-            ToggleFlyout(0);
+            ToggleFlyOut(0);
         }
 
-        private void ToggleFlyout(int index, bool stayOpen = false)
+        private void ToggleFlyOut(int index, bool stayOpen = false)
         {
-            var activeFlyout = (Flyout) Flyouts.Items[index];
-            if (activeFlyout == null)
+            var activeFlyOut = (Flyout) Flyouts.Items[index];
+            if (activeFlyOut == null)
             {
                 return;
             }
 
             foreach (
-                var nonactiveFlyout in
+                var inactiveFlyOut in
                 Flyouts.Items.Cast<Flyout>()
-                       .Where(nonactiveFlyout => nonactiveFlyout.IsOpen && nonactiveFlyout.Name != activeFlyout.Name))
+                       .Where(item => item.IsOpen && item.Name != activeFlyOut.Name))
             {
-                nonactiveFlyout.IsOpen = false;
+                inactiveFlyOut.IsOpen = false;
             }
 
-            if (activeFlyout.IsOpen && stayOpen)
+            if (activeFlyOut.IsOpen && stayOpen)
             {
-                activeFlyout.IsOpen = true;
+                activeFlyOut.IsOpen = true;
             }
             else
             {
-                activeFlyout.IsOpen = !activeFlyout.IsOpen;
+                activeFlyOut.IsOpen = !activeFlyOut.IsOpen;
             }
         }
-
-        //private void GetReferencedVersions(object sender, MouseButtonEventArgs e)
-        //{
-        //    var versionStringBuilder = new StringBuilder();
-
-        //    var serializer = new XmlSerializer(typeof(Packages));
-        //    using (var fileStream = new FileStream("packages.config", FileMode.Open))
-        //    {
-        //        var packages = (Packages) serializer.Deserialize(fileStream);
-
-        //        foreach (var package in packages.List.Where(ra => ra.Id.StartsWith("MahApps.Metro") || ra.Id.StartsWith("EvilBaschdi.Core")))
-        //        {
-        //            versionStringBuilder.AppendLine($"{package.Id}: {package.Version}");
-        //        }
-        //    }
-
-        //    _dialogService.ShowMessage("Referenced Versions", versionStringBuilder.ToString());
-        //}
 
         #endregion Flyout
 

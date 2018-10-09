@@ -6,6 +6,7 @@ namespace Dice.Core.PackIconImageSourceConverter
     /// <inheritdoc />
     /// <summary>
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     public class PackIconFontAwesomeImageSourceConverter : PackIconImageSourceConverterBase<PackIconFontAwesomeKind>
     {
         /// <inheritdoc />
