@@ -31,9 +31,8 @@ namespace Dice
     {
         private readonly IAppSettings _appSettings;
         private readonly IDicePath _dicePath;
-
+        private readonly IScreenShot _screenShot;
         private readonly IApplicationStyle _style;
-
         private string _initialDirectory;
         private int _overrideProtection;
         private string _path;
@@ -49,6 +48,7 @@ namespace Dice
             IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
             IMultiThreading multiThreadingHelper = new MultiThreading();
             IFileListFromPath filePath = new FileListFromPath(multiThreadingHelper);
+            _screenShot = new ScreenShot();
             _appSettings = new AppSettings(appSettingsBase);
             _dicePath = new DicePath(filePath);
             _style = new ApplicationStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
@@ -124,6 +124,12 @@ namespace Dice
             browser.ShowDialog();
             _appSettings.InitialDirectory = browser.SelectedPath;
             Load();
+        }
+
+        private void ScreenShotClick(object sender, RoutedEventArgs e)
+        {
+            var current = _screenShot.ValueFor(this);
+            _screenShot.SaveToClipboard(current);
         }
 
         #region Flyout

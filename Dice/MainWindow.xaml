@@ -13,7 +13,14 @@
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <!--  Settings  -->
+            <Button Click="ScreenShotClick">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Monitor" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="screenshot" />
+                </StackPanel>
+            </Button>
             <Button Click="ToggleSettingsFlyOutClick">
+
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Settings" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBlock Margin="5 0 0 0" VerticalAlignment="Center" Text="settings" />

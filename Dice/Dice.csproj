@@ -90,6 +90,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Internal\IScreenShot.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +117,9 @@
     <Compile Include="Internal\IRandomGenerator.cs" />
     <Compile Include="Internal\RandomGenerator.cs">
       <DependentUpon>IRandomGenerator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Internal\ScreenShot.cs">
+      <DependentUpon>IScreenShot.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
