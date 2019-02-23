@@ -1,4 +1,5 @@
 ﻿<controls:MetroWindow x:Class="Dice.MainWindow"
+xmlns:local="clr-namespace:Dice"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +8,7 @@
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                       xmlns:iconPackConverter="clr-namespace:Dice.Core.PackIconImageSourceConverter"
-                      mc:Ignorable="d" Icon="plainicon.ico" ShowIconOnTitleBar="False"
+                      mc:Ignorable="d" Icon="plainicon.ico" ShowIconOnTitleBar="True"
                       Title="Dice" Height="250" Width="500" TitleCharacterCasing="Normal">
     <!--  RightWindowCommands  -->
     <controls:MetroWindow.RightWindowCommands>
