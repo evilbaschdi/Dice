@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Dice.Core;
 using Dice.Internal;
 using Dice.Properties;
-using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
 using EvilBaschdi.CoreExtended.Metro;
+using EvilBaschdi.CoreExtended.Mvvm;
+using EvilBaschdi.CoreExtended.Mvvm.View;
+using EvilBaschdi.CoreExtended.Mvvm.ViewModel;
 using MahApps.Metro.Controls;
 
 // ReSharper disable RedundantExtendsListEntry
@@ -32,10 +30,11 @@ namespace Dice
         private readonly IAppSettings _appSettings;
         private readonly IDicePath _dicePath;
         private readonly IScreenShot _screenShot;
-        private readonly IApplicationStyle _style;
+        private readonly IThemeManagerHelper _themeManagerHelper;
         private string _initialDirectory;
         private int _overrideProtection;
         private string _path;
+        private AboutWindow _aboutWindow;
 
         /// <inheritdoc />
         public MainWindow()
@@ -44,18 +43,24 @@ namespace Dice
 
 
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            IApplicationStyleSettings coreSettings = new ApplicationStyleSettings(appSettingsBase);
-            IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
+            _themeManagerHelper = new ThemeManagerHelper();
             IMultiThreading multiThreadingHelper = new MultiThreading();
             IFileListFromPath filePath = new FileListFromPath(multiThreadingHelper);
             _screenShot = new ScreenShot();
             _appSettings = new AppSettings(appSettingsBase);
             _dicePath = new DicePath(filePath);
-            _style = new ApplicationStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
-            _style.Load(true);
-            var linkerTime = Assembly.GetExecutingAssembly().GetLinkerTime();
-            LinkerTime.Content = linkerTime.ToString(CultureInfo.InvariantCulture);
+            //_style = new ApplicationStyle(this, Accent, ThemeSwitch, coreSettings, themeManagerHelper);
+            //_style.Load(true);
+            _aboutWindow = new AboutWindow();
+            var assembly = typeof(MainWindow).Assembly;
 
+            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
+            _aboutWindow.DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper);
+
+            foreach (Window currentWindow in Application.Current.Windows)
+            {
+                _themeManagerHelper.SetSystemColorTheme(currentWindow);
+            }
 
             Load();
         }
@@ -132,73 +137,9 @@ namespace Dice
             _screenShot.SaveToClipboard(current);
         }
 
-        #region Flyout
-
-        private void ToggleSettingsFlyOutClick(object sender, RoutedEventArgs e)
+        private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
-            ToggleFlyOut(0);
+            _aboutWindow.Show();
         }
-
-        private void ToggleFlyOut(int index, bool stayOpen = false)
-        {
-            var activeFlyOut = (Flyout) Flyouts.Items[index];
-            if (activeFlyOut == null)
-            {
-                return;
-            }
-
-            foreach (
-                var inactiveFlyOut in
-                Flyouts.Items.Cast<Flyout>()
-                       .Where(item => item.IsOpen && item.Name != activeFlyOut.Name))
-            {
-                inactiveFlyOut.IsOpen = false;
-            }
-
-            if (activeFlyOut.IsOpen && stayOpen)
-            {
-                activeFlyOut.IsOpen = true;
-            }
-            else
-            {
-                activeFlyOut.IsOpen = !activeFlyOut.IsOpen;
-            }
-        }
-
-        #endregion Flyout
-
-        #region MetroStyle
-
-        private void SaveStyleClick(object sender, RoutedEventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _style.SaveStyle();
-        }
-
-        private void Theme(object sender, EventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _style.SetTheme(sender);
-        }
-
-        private void AccentOnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (_overrideProtection == 0)
-            {
-                return;
-            }
-
-            _style.SetAccent(sender, e);
-        }
-
-        #endregion MetroStyle
     }
 }
