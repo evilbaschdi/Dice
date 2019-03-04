@@ -4,38 +4,26 @@
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net462;net472</TargetFrameworks>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  <!--<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>-->
-  <PropertyGroup>
-    <ApplicationIcon>plainicon.ico</ApplicationIcon>    
+    <ApplicationIcon>plainicon.ico</ApplicationIcon> 
+    <Version>2019.3.4.1911</Version> 
+    <Authors>Sebastian Walter</Authors> 
+    <Company>evilbaschdi</Company> 
+    <PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl> 
+    <RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl> 
+    <PackageIconUrl>https://github.com/evilbaschdi/Dice/blob/master/Dice/plainicon.ico</PackageIconUrl> 
+    <Copyright>Copyright © evilbaschdi 2015 - 2019</Copyright>    
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="dice.png" />
     <None Remove="Dice.VisualElementsManifest.xml" />
     <None Remove="dice_150.png" />
     <None Remove="dice_70.png" />
     <None Remove="plainicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dice.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Dice.VisualElementsManifest.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -47,16 +35,31 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="3.0.2.4" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2018.416.22.11" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2018.424.21.15" />
-    <PackageReference Include="MahApps.Metro" Version="1.6.5" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="2.3.0" />
-    
+    <PackageReference Include="ControlzEx" Version="4.0.0-alpha0231" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2019.3.4.751-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2019.3.4.1921-develop" />
+    <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0261" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="3.0.0-alpha0103" />    
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="plainicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>
