@@ -33,6 +33,7 @@ namespace Dice
         private readonly IScreenShot _screenShot;
         private string _initialDirectory;
         private string _path;
+        private AboutWindow _aboutWindow;
 
         /// <inheritdoc />
         public MainWindow()
