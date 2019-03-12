@@ -27,13 +27,12 @@ namespace Dice
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private readonly AboutWindow _aboutWindow;
         private readonly IAppSettings _appSettings;
         private readonly IDicePath _dicePath;
         private readonly IScreenShot _screenShot;
+        private readonly IThemeManagerHelper _themeManagerHelper;
         private string _initialDirectory;
         private string _path;
-        private AboutWindow _aboutWindow;
 
         /// <inheritdoc />
         public MainWindow()
@@ -48,19 +47,15 @@ namespace Dice
             }
 
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            IThemeManagerHelper themeManagerHelper = new ThemeManagerHelper();
+            _themeManagerHelper = new ThemeManagerHelper();
             IMultiThreading multiThreadingHelper = new MultiThreading();
             IFileListFromPath filePath = new FileListFromPath(multiThreadingHelper);
             _screenShot = new ScreenShot();
             _appSettings = new AppSettings(appSettingsBase);
             _dicePath = new DicePath(filePath);
-            IApplicationStyle style = new ApplicationStyle(themeManagerHelper);
+            IApplicationStyle style = new ApplicationStyle(_themeManagerHelper);
             style.Load(true);
-            _aboutWindow = new AboutWindow();
-            var assembly = typeof(MainWindow).Assembly;
 
-            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
-            _aboutWindow.DataContext = new AboutViewModel(aboutWindowContent, themeManagerHelper);
 
             Load();
         }
@@ -153,7 +148,13 @@ namespace Dice
 
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
-            _aboutWindow.Show();
+            var aboutWindow = new AboutWindow();
+            var assembly = typeof(MainWindow).Assembly;
+
+            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
+            aboutWindow.DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper);
+
+            aboutWindow.Show();
         }
     }
 }
