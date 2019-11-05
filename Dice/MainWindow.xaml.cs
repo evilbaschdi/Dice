@@ -148,13 +148,15 @@ namespace Dice
 
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
-            var aboutWindow = new AboutWindow();
             var assembly = typeof(MainWindow).Assembly;
-
             IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
-            aboutWindow.DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper);
 
-            aboutWindow.Show();
+            var aboutWindow = new AboutWindow
+                              {
+                                  DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper)
+                              };
+
+            aboutWindow.ShowDialog();
         }
     }
 }

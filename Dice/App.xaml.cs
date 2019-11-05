@@ -10,6 +10,7 @@ namespace Dice
     // ReSharper disable once RedundantExtendsListEntry
     public partial class App : Application
     {
+        /// <inheritdoc />
         protected override void OnStartup(StartupEventArgs e)
         {
             var themeManagerHelper = new ThemeManagerHelper();

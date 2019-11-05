@@ -2,16 +2,19 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net462;net472</TargetFrameworks>
+    <TargetFramework>net48</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>plainicon.ico</ApplicationIcon> 
-    <Version>2019.3.12.750</Version> 
-    <Authors>Sebastian Walter</Authors> 
-    <Company>evilbaschdi</Company> 
-    <PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl> 
-    <RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl> 
-    <PackageIconUrl>https://github.com/evilbaschdi/Dice/blob/master/Dice/plainicon.ico</PackageIconUrl> 
-    <Copyright>Copyright © 2015 - 2019 evilbaschdi</Copyright>    
+    <ApplicationIcon>plainicon.ico</ApplicationIcon>
+    <Authors>Sebastian Walter</Authors>
+    <Company>evilbaschdi (Sebastian Walter)</Company>
+    <PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
+    <PackageIconUrl>https://github.com/evilbaschdi/Dice/blob/master/Dice/plainicon.ico</PackageIconUrl>
+    <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))-develop</Version>
+    <Copyright>Copyright © 2015 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
+
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Dice.xml</DocumentationFile>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="dice.png" />
@@ -35,14 +38,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.0.0-alpha0232" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2019.3.9.1706-develop" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2019.3.9.1706-develop" />
-    <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0262" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="3.0.0-alpha0134" />    
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
+    <PackageReference Include="ControlzEx" Version="4.1.1" />
+    <PackageReference Include="MahApps.Metro" Version="2.0.0-alpha0531" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="3.0.0-alpha0258" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2019.10.10.1115-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2019.10.21.1930-develop" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="plainicon.ico">
