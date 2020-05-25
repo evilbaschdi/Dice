@@ -11,7 +11,7 @@
     <!--  RightWindowCommands  -->
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
-            <!--  Settings  -->
+            <!-- ScreenShot -->
             <Button Click="ScreenShotClick">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Monitor" Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -41,7 +41,7 @@
         <!-- throw the dice -->
         <Button Name="ThrowTheDice" Click="ThrowTheDiceOnClick" Margin="10,50,10,10">
             <StackPanel Orientation="Horizontal">
-                <iconPacks:PackIconMaterial Kind="CubeOutline" Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconMaterial Kind="CubeOutline" Width="64" Height="64" HorizontalAlignment="Center" VerticalAlignment="Center" Spin="True" SpinDuration="3" />
                 <TextBlock Name="ThrowTheDiceContent" Margin="10,0,0,0" VerticalAlignment="Center" Text="throw the dice" />
             </StackPanel>
         </Button>

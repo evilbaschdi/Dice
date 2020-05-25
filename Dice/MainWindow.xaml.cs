@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Shell;
 using Dice.Core;
 using Dice.Internal;
 using Dice.Properties;
 using EvilBaschdi.Core.Internal;
+using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
-using EvilBaschdi.CoreExtended.Metro;
-using EvilBaschdi.CoreExtended.Mvvm;
-using EvilBaschdi.CoreExtended.Mvvm.View;
-using EvilBaschdi.CoreExtended.Mvvm.ViewModel;
+using EvilBaschdi.CoreExtended.Controls.About;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 // ReSharper disable RedundantExtendsListEntry
 
@@ -29,8 +26,8 @@ namespace Dice
     {
         private readonly IAppSettings _appSettings;
         private readonly IDicePath _dicePath;
+        private readonly IProcessByPath _processByPath;
         private readonly IScreenShot _screenShot;
-        private readonly IThemeManagerHelper _themeManagerHelper;
         private string _initialDirectory;
         private string _path;
 
@@ -47,23 +44,20 @@ namespace Dice
             }
 
             IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            _themeManagerHelper = new ThemeManagerHelper();
-            IMultiThreading multiThreadingHelper = new MultiThreading();
-            IFileListFromPath filePath = new FileListFromPath(multiThreadingHelper);
+            IFileListFromPath filePath = new FileListFromPath();
             _screenShot = new ScreenShot();
             _appSettings = new AppSettings(appSettingsBase);
             _dicePath = new DicePath(filePath);
-            IApplicationStyle style = new ApplicationStyle(_themeManagerHelper);
+            IApplicationStyle style = new ApplicationStyle();
             style.Load(true);
-
+            _processByPath = new ProcessByPath();
 
             Load();
         }
 
+        /// <inheritdoc />
         protected override void OnClosed(EventArgs e)
         {
-            //_aboutWindow.Close();
-
             foreach (Window currentWindow in Application.Current.Windows)
             {
                 if (currentWindow != Application.Current.MainWindow)
@@ -87,7 +81,14 @@ namespace Dice
 
         private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            Process.Start(_path);
+            try
+            {
+                _processByPath.RunFor(_path);
+            }
+            catch (Exception e)
+            {
+                this.ShowMessageAsync(e.GetType().ToString(), e.Message);
+            }
         }
 
         private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
@@ -104,16 +105,10 @@ namespace Dice
 
         private async Task RunDiceAsync()
         {
-            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Indeterminate;
-            Cursor = Cursors.Wait;
-
             var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
             await task.ConfigureAwait(true);
             _path = task.Result;
             ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
-
-            TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-            Cursor = Cursors.Arrow;
         }
 
 
@@ -149,11 +144,11 @@ namespace Dice
         private void AboutWindowClick(object sender, RoutedEventArgs e)
         {
             var assembly = typeof(MainWindow).Assembly;
-            IAboutWindowContent aboutWindowContent = new AboutWindowContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
+            IAboutContent aboutWindowContent = new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
 
             var aboutWindow = new AboutWindow
                               {
-                                  DataContext = new AboutViewModel(aboutWindowContent, _themeManagerHelper)
+                                  DataContext = new AboutViewModel(aboutWindowContent)
                               };
 
             aboutWindow.ShowDialog();

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using EvilBaschdi.CoreExtended.AppHelpers;
 
 namespace Dice.Core
@@ -20,8 +21,14 @@ namespace Dice.Core
         /// <inheritdoc />
         public string InitialDirectory
         {
-            get => _appSettingsBase.Get("InitialDirectory", "");
-            set => _appSettingsBase.Set("InitialDirectory", value);
+            get => _appSettingsBase?.Get("InitialDirectory", Path.GetTempPath());
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    _appSettingsBase?.Set("InitialDirectory", value);
+                }
+            }
         }
     }
 }
