@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Input;
 using Dice.Core;
 using Dice.Internal;
 using Dice.Properties;
+using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
@@ -26,6 +28,7 @@ namespace Dice
     {
         private readonly IAppSettings _appSettings;
         private readonly IDicePath _dicePath;
+        private readonly Dictionary<string, int> _pathClickCounter = new Dictionary<string, int>();
         private readonly IProcessByPath _processByPath;
         private readonly IScreenShot _screenShot;
         private string _initialDirectory;
@@ -55,26 +58,12 @@ namespace Dice
             Load();
         }
 
-        /// <inheritdoc />
-        protected override void OnClosed(EventArgs e)
-        {
-            foreach (Window currentWindow in Application.Current.Windows)
-            {
-                if (currentWindow != Application.Current.MainWindow)
-                {
-                    currentWindow.Close();
-                }
-            }
-
-            base.OnClosed(e);
-        }
-
         private void Load()
         {
             ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory);
 
             _initialDirectory = _appSettings.InitialDirectory;
-            InitialDirectory.Text = _initialDirectory;
+            InitialDirectory.Text = _initialDirectory ?? string.Empty;
 
             ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
         }
@@ -83,7 +72,18 @@ namespace Dice
         {
             try
             {
-                _processByPath.RunFor(_path);
+                if (!string.IsNullOrWhiteSpace(_path))
+                {
+                    _processByPath.RunFor(_path);
+                }
+                else if (!string.IsNullOrWhiteSpace(_initialDirectory))
+                {
+                    _processByPath.RunFor(_initialDirectory);
+                }
+                else
+                {
+                    this.ShowMessageAsync("Error", "Path is empty. Please choose a path and roll the dice");
+                }
             }
             catch (Exception e)
             {
@@ -97,20 +97,24 @@ namespace Dice
             await RunDiceAsync().ConfigureAwait(true);
         }
 
-        private async void ThumbButtonInfoBrowseClick(object sender, EventArgs e)
-        {
-            // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
-            await RunDiceAsync().ConfigureAwait(true);
-        }
-
         private async Task RunDiceAsync()
         {
             var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
             await task.ConfigureAwait(true);
             _path = task.Result;
-            ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}{Environment.NewLine}[click to dice again]";
-        }
 
+            if (!_pathClickCounter.ContainsKey(_path))
+            {
+                _pathClickCounter.Add(_path, 1);
+            }
+
+            var clicks = _pathClickCounter[_path];
+            _pathClickCounter[_path] += 1;
+
+            var intToWord = clicks == 1 ? "once" : $"{IntExtensions.ToWords(clicks)} times";
+
+            ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]";
+        }
 
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
@@ -153,5 +157,9 @@ namespace Dice
 
             aboutWindow.ShowDialog();
         }
+
+       
     }
+
+
 }

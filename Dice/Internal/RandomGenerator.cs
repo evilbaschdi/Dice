@@ -1,45 +1,27 @@
 ﻿using System;
-using System.Security.Cryptography;
+using JetBrains.Annotations;
 
 namespace Dice.Internal
 {
     /// <inheritdoc />
     public class RandomGenerator : IRandomGenerator
     {
-        [ThreadStatic] private static Random _local;
-        private readonly RNGCryptoServiceProvider _rngCryptoServiceProvider;
+        private readonly INext _next;
 
         /// <summary>
-        ///     Constructor of the class
+        ///     Constructor
         /// </summary>
-        /// <param name="rngCryptoServiceProvider"></param>
-        public RandomGenerator(RNGCryptoServiceProvider rngCryptoServiceProvider)
+        /// <param name="next"></param>
+        public RandomGenerator([NotNull] INext next)
         {
-            _rngCryptoServiceProvider = rngCryptoServiceProvider ?? throw new ArgumentNullException(nameof(rngCryptoServiceProvider));
-        }
-
-        private int Next
-        {
-            get
-            {
-                var inst = _local;
-                if (inst != null)
-                {
-                    return inst.Next();
-                }
-
-                var buffer = new byte[4];
-                _rngCryptoServiceProvider.GetBytes(buffer);
-                _local = inst = new Random(BitConverter.ToInt32(buffer, 0));
-                return inst.Next();
-            }
+            _next = next ?? throw new ArgumentNullException(nameof(next));
         }
 
 
         /// <inheritdoc />
         public int ValueFor(int min, int max)
         {
-            var result = Next;
+            var result = _next.Value;
             return result % max + min;
         }
     }

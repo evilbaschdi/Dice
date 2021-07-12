@@ -27,19 +27,16 @@ namespace Dice.Internal
                 throw new ArgumentNullException(nameof(initialDirectory));
             }
 
-            string GetPath()
-            {
-                var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory).ToList();
+            return () =>
+                   {
+                       var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory).ToList();
+                       var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+                       var next = new Next(rngCryptoServiceProvider);
+                       var randomGenerator = new RandomGenerator(next);
+                       var index = randomGenerator.ValueFor(0, folderList.Count);
 
-                var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-                var randomGenerator = new RandomGenerator(rngCryptoServiceProvider);
-
-                var index = randomGenerator.ValueFor(0, folderList.Count);
-
-                return folderList[index];
-            }
-
-            return GetPath;
+                       return folderList[index];
+                   };
         }
     }
 }

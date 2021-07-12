@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <ApplicationIcon>plainicon.ico</ApplicationIcon>
@@ -6,15 +6,15 @@
     <Company>evilbaschdi (Sebastian Walter)</Company>
     <Copyright>Copyright © 2015 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Dice.xml</DocumentationFile>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
     <OutputType>WinExe</OutputType>
     <PackageIconUrl>https://github.com/evilbaschdi/Dice/blob/master/Dice/plainicon.ico</PackageIconUrl>
     <PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl>
     <Product>Dice</Product>
     <RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))-develop</Version>
+    <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="dice.png" />
@@ -36,18 +36,29 @@
     <Content Include="dice_70.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="4.3.0" />
-    <PackageReference Include="MahApps.Metro" Version="2.0.0" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.2.0" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2020.5.3.1518" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2020.5.24.1338" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <Resource Include="plainicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ControlzEx" Version="5.0.1" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.8.0" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2021.7.12.1538-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2021.6.7.1723-develop" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.0-beta-20204-02">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
