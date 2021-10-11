@@ -30,10 +30,7 @@ namespace Dice.Internal
             return () =>
                    {
                        var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory).ToList();
-                       var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-                       var next = new Next(rngCryptoServiceProvider);
-                       var randomGenerator = new RandomGenerator(next);
-                       var index = randomGenerator.ValueFor(0, folderList.Count);
+                       var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
 
                        return folderList[index];
                    };
