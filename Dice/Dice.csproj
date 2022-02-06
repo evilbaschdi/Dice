@@ -17,14 +17,14 @@
     <Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="dice.png" />
+    <None Remove="about.png" />
     <None Remove="Dice.VisualElementsManifest.xml" />
     <None Remove="dice_150.png" />
     <None Remove="dice_70.png" />
     <None Remove="plainicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dice.png">
+    <Content Include="about.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Dice.VisualElementsManifest.xml">
@@ -43,15 +43,15 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ControlzEx" Version="5.0.1" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
-    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.10.0" />
-    <PackageReference Include="EvilBaschdi.Core" Version="2021.10.11.609-develop" />
-    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2021.10.11.1609-develop" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
+    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
+    <PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
+    <PackageReference Include="EvilBaschdi.Core" Version="2022.1.10.712-develop" />
+    <PackageReference Include="EvilBaschdi.CoreExtended" Version="2022.1.23.1359-develop" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.0-beta-20204-02">
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

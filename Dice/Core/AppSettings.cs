@@ -2,32 +2,31 @@ using System;
 using System.IO;
 using EvilBaschdi.CoreExtended.AppHelpers;
 
-namespace Dice.Core
+namespace Dice.Core;
+
+/// <inheritdoc />
+public class AppSettings : IAppSettings
 {
-    /// <inheritdoc />
-    public class AppSettings : IAppSettings
+    private readonly IAppSettingsBase _appSettingsBase;
+
+    /// <summary>
+    ///     Constructor
+    /// </summary>
+    /// <param name="appSettingsBase"></param>
+    public AppSettings(IAppSettingsBase appSettingsBase)
     {
-        private readonly IAppSettingsBase _appSettingsBase;
+        _appSettingsBase = appSettingsBase ?? throw new ArgumentNullException(nameof(appSettingsBase));
+    }
 
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="appSettingsBase"></param>
-        public AppSettings(IAppSettingsBase appSettingsBase)
+    /// <inheritdoc />
+    public string InitialDirectory
+    {
+        get => _appSettingsBase?.Get("InitialDirectory", Path.GetTempPath());
+        set
         {
-            _appSettingsBase = appSettingsBase ?? throw new ArgumentNullException(nameof(appSettingsBase));
-        }
-
-        /// <inheritdoc />
-        public string InitialDirectory
-        {
-            get => _appSettingsBase?.Get("InitialDirectory", Path.GetTempPath());
-            set
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    _appSettingsBase?.Set("InitialDirectory", value);
-                }
+                _appSettingsBase?.Set("InitialDirectory", value);
             }
         }
     }

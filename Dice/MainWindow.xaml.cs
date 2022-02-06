@@ -18,138 +18,143 @@ using MahApps.Metro.Controls.Dialogs;
 
 // ReSharper disable RedundantExtendsListEntry
 
-namespace Dice
+namespace Dice;
+
+/// <inheritdoc cref="MetroWindow" />
+/// <summary>
+///     Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : MetroWindow
 {
-    /// <inheritdoc cref="MetroWindow" />
-    /// <summary>
-    ///     Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : MetroWindow
+    private readonly IAppSettings _appSettings;
+    private readonly IDicePath _dicePath;
+    private readonly Dictionary<string, int> _pathClickCounter = new();
+    private readonly IProcessByPath _processByPath;
+    private readonly IScreenShot _screenShot;
+    private string _initialDirectory;
+    private string _path;
+
+    /// <inheritdoc />
+    public MainWindow()
     {
-        private readonly IAppSettings _appSettings;
-        private readonly IDicePath _dicePath;
-        private readonly Dictionary<string, int> _pathClickCounter = new Dictionary<string, int>();
-        private readonly IProcessByPath _processByPath;
-        private readonly IRoundCorners _roundCorners;
-        private readonly IScreenShot _screenShot;
-        private string _initialDirectory;
-        private string _path;
+        InitializeComponent();
 
-        /// <inheritdoc />
-        public MainWindow()
+        if (Settings.Default.UpgradeRequired)
         {
-            InitializeComponent();
-
-            if (Settings.Default.UpgradeRequired)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpgradeRequired = false;
-                Settings.Default.Save();
-            }
-
-            IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-            IFileListFromPath filePath = new FileListFromPath();
-
-            _screenShot = new ScreenShot();
-            _appSettings = new AppSettings(appSettingsBase);
-            _dicePath = new DicePath(filePath);
-            _roundCorners = new RoundCorners();
-            IApplicationStyle style = new ApplicationStyle(_roundCorners, true);
-            style.Run();
-            _processByPath = new ProcessByPath();
-
-            Load();
+            Settings.Default.Upgrade();
+            Settings.Default.UpgradeRequired = false;
+            Settings.Default.Save();
         }
 
-        private void Load()
+        IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
+        IFileListFromPath filePath = new FileListFromPath();
+
+        _screenShot = new ScreenShot();
+        _appSettings = new AppSettings(appSettingsBase);
+        _dicePath = new DicePath(filePath);
+        IRoundCorners roundCorners = new RoundCorners();
+        IApplicationStyle style = new ApplicationStyle(roundCorners, true);
+        style.Run();
+        _processByPath = new ProcessByPath();
+
+        Load();
+    }
+
+    private void Load()
+    {
+        ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) &&
+                                 Directory.Exists(_appSettings.InitialDirectory);
+
+        _initialDirectory = _appSettings.InitialDirectory;
+        InitialDirectory.Text = _initialDirectory ?? string.Empty;
+
+        ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
+    }
+
+    private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+    {
+        try
         {
-            ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) &&
-                                     Directory.Exists(_appSettings.InitialDirectory);
-
-            _initialDirectory = _appSettings.InitialDirectory;
-            InitialDirectory.Text = _initialDirectory ?? string.Empty;
-
-            ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
-        }
-
-        private void ThrowTheDiceOnMouseRightButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
-        {
-            try
+            if (!string.IsNullOrWhiteSpace(_path))
             {
-                if (!string.IsNullOrWhiteSpace(_path))
-                    _processByPath.RunFor(_path);
-                else if (!string.IsNullOrWhiteSpace(_initialDirectory))
-                    _processByPath.RunFor(_initialDirectory);
-                else
-                    this.ShowMessageAsync("Error", "Path is empty. Please choose a path and roll the dice");
+                _processByPath.RunFor(_path);
             }
-            catch (Exception e)
+            else if (!string.IsNullOrWhiteSpace(_initialDirectory))
             {
-                this.ShowMessageAsync(e.GetType().ToString(), e.Message);
+                _processByPath.RunFor(_initialDirectory);
+            }
+            else
+            {
+                this.ShowMessageAsync("Error", "Path is empty. Please choose a path and roll the dice");
             }
         }
-
-        private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
+        catch (Exception e)
         {
-            // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
-            await RunDiceAsync().ConfigureAwait(true);
+            this.ShowMessageAsync(e.GetType().ToString(), e.Message);
+        }
+    }
+
+    private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
+    {
+        // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
+        await RunDiceAsync().ConfigureAwait(true);
+    }
+
+    private async Task RunDiceAsync()
+    {
+        var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
+        await task.ConfigureAwait(true);
+        _path = task.Result;
+
+        if (!_pathClickCounter.ContainsKey(_path))
+        {
+            _pathClickCounter.Add(_path, 1);
         }
 
-        private async Task RunDiceAsync()
+        var clicks = _pathClickCounter[_path];
+        _pathClickCounter[_path] += 1;
+
+        var intToWord = clicks == 1 ? "once" : $"{clicks.ToWords()} times";
+
+        ThrowTheDiceContent.Text =
+            $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]";
+    }
+
+    private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (!Directory.Exists(InitialDirectory.Text))
         {
-            var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
-            await task.ConfigureAwait(true);
-            _path = task.Result;
-
-            if (!_pathClickCounter.ContainsKey(_path)) _pathClickCounter.Add(_path, 1);
-
-            var clicks = _pathClickCounter[_path];
-            _pathClickCounter[_path] += 1;
-
-            var intToWord = clicks == 1 ? "once" : $"{clicks.ToWords()} times";
-
-            ThrowTheDiceContent.Text =
-                $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]";
+            return;
         }
 
-        private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (!Directory.Exists(InitialDirectory.Text)) return;
+        _appSettings.InitialDirectory = InitialDirectory.Text;
+        Load();
+    }
 
-            _appSettings.InitialDirectory = InitialDirectory.Text;
-            Load();
-        }
+    private void BrowseClick(object sender, RoutedEventArgs e)
+    {
+        var browser = new ExplorerFolderBrowser
+                      {
+                          SelectedPath = _initialDirectory
+                      };
+        browser.ShowDialog();
+        _appSettings.InitialDirectory = browser.SelectedPath;
+        Load();
+    }
 
+    private void ScreenShotClick(object sender, RoutedEventArgs e)
+    {
+        var current = _screenShot.ValueFor(this);
+        _screenShot.SaveToClipboard(current);
+    }
 
-        private void BrowseClick(object sender, RoutedEventArgs e)
-        {
-            var browser = new ExplorerFolderBrowser
-            {
-                SelectedPath = _initialDirectory
-            };
-            browser.ShowDialog();
-            _appSettings.InitialDirectory = browser.SelectedPath;
-            Load();
-        }
+    private void AboutWindowClick(object sender, RoutedEventArgs e)
+    {
+        ICurrentAssembly currentAssembly = new CurrentAssembly();
+        IAboutContent aboutContent = new AboutContent(currentAssembly);
+        IAboutModel aboutModel = new AboutViewModel(aboutContent);
+        var aboutWindow = new AboutWindow(aboutModel);
 
-        private void ScreenShotClick(object sender, RoutedEventArgs e)
-        {
-            var current = _screenShot.ValueFor(this);
-            _screenShot.SaveToClipboard(current);
-        }
-
-        private void AboutWindowClick(object sender, RoutedEventArgs e)
-        {
-            var assembly = typeof(MainWindow).Assembly;
-            IAboutContent aboutWindowContent =
-                new AboutContent(assembly, $@"{AppDomain.CurrentDomain.BaseDirectory}\dice.png");
-
-            var aboutWindow = new AboutWindow
-            {
-                DataContext = new AboutViewModel(aboutWindowContent, _roundCorners)
-            };
-
-            aboutWindow.ShowDialog();
-        }
+        aboutWindow.ShowDialog();
     }
 }

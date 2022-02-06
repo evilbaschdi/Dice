@@ -4,7 +4,10 @@
                       ResizeMode="CanMinimize" GlowBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                      Height="250" Width="500" TitleCharacterCasing="Normal" Icon="plainicon.ico">
+                      ShowIconOnTitleBar="False"
+                      Height="250" Width="500"
+                      TitleCharacterCasing="Normal"
+                      Icon="plainicon.ico">
     <!--  RightWindowCommands  -->
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>

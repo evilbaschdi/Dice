@@ -1,21 +1,24 @@
 ﻿using System.Windows;
+#if !DEBUG
 using ControlzEx.Theming;
+#endif
 
-namespace Dice
+namespace Dice;
+
+/// <inheritdoc />
+/// <summary>
+///     Interaction logic for App.xaml
+/// </summary>
+// ReSharper disable once RedundantExtendsListEntry
+public partial class App : Application
 {
     /// <inheritdoc />
-    /// <summary>
-    ///     Interaction logic for App.xaml
-    /// </summary>
-    // ReSharper disable once RedundantExtendsListEntry
-    public partial class App : Application
+    protected override void OnStartup(StartupEventArgs e)
     {
-        /// <inheritdoc />
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            ThemeManager.Current.SyncTheme(ThemeSyncMode.SyncAll);
+#if !DEBUG
+        ThemeManager.Current.SyncTheme(ThemeSyncMode.SyncAll);
+#endif
 
-            base.OnStartup(e);
-        }
+        base.OnStartup(e);
     }
 }
