@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Dice.Core;
-using Dice.Internal;
 using Dice.Properties;
+using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.CoreExtended;
@@ -62,11 +59,10 @@ public partial class MainWindow : MetroWindow
 
     private void Load()
     {
-        ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) &&
-                                 Directory.Exists(_appSettings.InitialDirectory);
+        ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory));
 
         _initialDirectory = _appSettings.InitialDirectory;
-        InitialDirectory.Text = _initialDirectory ?? string.Empty;
+        InitialDirectory.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, _initialDirectory ?? string.Empty);
 
         ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
     }
@@ -75,13 +71,10 @@ public partial class MainWindow : MetroWindow
     {
         try
         {
-            if (!string.IsNullOrWhiteSpace(_path))
+            var path = _path ?? _initialDirectory;
+            if (!string.IsNullOrWhiteSpace(path))
             {
-                _processByPath.RunFor(_path);
-            }
-            else if (!string.IsNullOrWhiteSpace(_initialDirectory))
-            {
-                _processByPath.RunFor(_initialDirectory);
+                _processByPath.RunFor(path);
             }
             else
             {

@@ -1,7 +1,6 @@
-﻿using System;
-using EvilBaschdi.Core;
+﻿using EvilBaschdi.Core;
 
-namespace Dice.Internal;
+namespace Dice.Core;
 
 /// <inheritdoc />
 public interface IDicePath : IValueFor<string, Func<string>>

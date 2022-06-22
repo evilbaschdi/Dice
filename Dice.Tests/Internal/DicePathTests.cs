@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
-using Dice.Internal;
+using Dice.Core;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Testing;
 using FluentAssertions;
@@ -52,6 +52,6 @@ public class DicePathTests
         var result = task.Result;
 
         // Assert
-        dummyFolderList.Contains(result).Should().BeTrue();
+        dummyFolderList.Should().Contain(result);
     }
 }
