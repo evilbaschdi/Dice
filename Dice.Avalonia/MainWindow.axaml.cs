@@ -36,7 +36,8 @@ namespace Dice.Avalonia
             _dicePath = new DicePath(filePath);
 
             IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
-            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile);
+            ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile = new CurrentDiceSettingsFromJsonFile();
+            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile, currentDiceSettingsFromJsonFile);
 
             _initialDirectory = _initialDirectoryFromSettings.Value;
             ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory);

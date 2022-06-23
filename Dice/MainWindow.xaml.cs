@@ -46,7 +46,8 @@ public partial class MainWindow : MetroWindow
         _dicePath = new DicePath(filePath);
 
         IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
-        _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile);
+        ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile = new CurrentDiceSettingsFromJsonFile();
+        _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile, currentDiceSettingsFromJsonFile);
 
         IRoundCorners roundCorners = new RoundCorners();
         IApplicationStyle style = new ApplicationStyle(roundCorners, true);

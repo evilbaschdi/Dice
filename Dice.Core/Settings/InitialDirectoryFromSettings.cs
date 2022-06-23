@@ -3,16 +3,20 @@
 /// <inheritdoc />
 public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
 {
+    private const string Key = "InitialDirectory";
+    private readonly ICurrentDiceSettingsFromJsonFile _currentDiceSettingsFromJsonFile;
     private readonly IDiceSettingsFromJsonFile _diceSettingsFromJsonFile;
 
     /// <summary>
     ///     Constructor
     /// </summary>
     /// <param name="diceSettingsFromJsonFile"></param>
+    /// <param name="currentDiceSettingsFromJsonFile"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public InitialDirectoryFromSettings(IDiceSettingsFromJsonFile diceSettingsFromJsonFile)
+    public InitialDirectoryFromSettings(IDiceSettingsFromJsonFile diceSettingsFromJsonFile, ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile)
     {
         _diceSettingsFromJsonFile = diceSettingsFromJsonFile ?? throw new ArgumentNullException(nameof(diceSettingsFromJsonFile));
+        _currentDiceSettingsFromJsonFile = currentDiceSettingsFromJsonFile ?? throw new ArgumentNullException(nameof(currentDiceSettingsFromJsonFile));
     }
 
     /// <inheritdoc cref="string" />
@@ -20,12 +24,15 @@ public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
     {
         get
         {
-            var configuration = _diceSettingsFromJsonFile.Value;
+            var fallbackConfiguration = _diceSettingsFromJsonFile.Value;
+            var currentConfiguration = _currentDiceSettingsFromJsonFile.Value;
 
-            //todo maybe  per device / user configuration?
-            var initialDirectory = configuration?["InitialDirectory"];
+            var fallbackInitialDirectory = fallbackConfiguration?[Key];
+            var currentInitialDirectory = currentConfiguration?[Key];
 
-            return initialDirectory;
+            return !string.IsNullOrWhiteSpace(currentInitialDirectory)
+                ? currentInitialDirectory
+                : fallbackInitialDirectory;
         }
         set
         {
@@ -34,25 +41,8 @@ public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
                 return;
             }
 
-            var configuration = _diceSettingsFromJsonFile.Value;
+            var configuration = _currentDiceSettingsFromJsonFile.Value;
             configuration["InitialDirectory"] = value;
         }
     }
 }
-
-///// <inheritdoc />
-//public interface ICurrentDiceSettingsFromJsonFile : ISettingsFromJsonFile
-//{
-//}
-
-///// <inheritdoc cref="WritableSettingsFromJsonFile" />
-//public class CurrentDiceSettingsFromJsonFile : WritableSettingsFromJsonFile, ICurrentDiceSettingsFromJsonFile
-//{
-//    /// <summary>
-//    ///     Constructor
-//    /// </summary>
-//    public CurrentDiceSettingsFromJsonFile()
-//        : base($"Settings\\DiceSettings.{Environment.MachineName}.{Environment.UserName}.json")
-//    {
-//    }
-//}

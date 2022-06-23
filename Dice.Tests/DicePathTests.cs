@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
-using Dice.Core;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Testing;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Dice.Tests.Internal;
+namespace Dice.Core.Tests.Internal;
 
 public class DicePathTests
 {

@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dice.Tests", "Dice.Tests\Dice.Tests.csproj", "{9A70BD60-A49E-47F2-9FD8-BB7026AB7148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dice.Core.Tests", "Dice.Tests\Dice.Core.Tests.csproj", "{9A70BD60-A49E-47F2-9FD8-BB7026AB7148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dice.Core", "Dice.Core\Dice.Core.csproj", "{BED950A1-48E7-42CF-A13C-80418A036867}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dice.Core", "Dice.Core\Dice.Core.csproj", "{BED950A1-48E7-42CF-A13C-80418A036867}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dice.Avalonia", "Dice.Avalonia\Dice.Avalonia.csproj", "{86B7E2CD-2BF4-4048-A1A0-B98B516AED8E}"
 EndProject
