@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Dice.Core;
+using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
@@ -25,17 +26,17 @@ namespace Dice.Avalonia
         public MainWindow()
         {
             InitializeComponent();
-
             Load();
         }
 
         private void Load()
         {
             _processByPath = new ProcessByPath();
-            IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
-            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile);
             IFileListFromPath filePath = new FileListFromPath();
             _dicePath = new DicePath(filePath);
+
+            IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
+            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile);
 
             _initialDirectory = _initialDirectoryFromSettings.Value;
             ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory);
@@ -76,9 +77,10 @@ namespace Dice.Avalonia
         {
             if (!Directory.Exists(InitialDirectory.Text))
             {
+                return;
             }
 
-            //_appSettings.InitialDirectory = _initialDirectory.Text;
+            _initialDirectoryFromSettings.Value = InitialDirectory.Text;
             //Load();
         }
 
@@ -92,9 +94,7 @@ namespace Dice.Avalonia
                           };
             var result = await browser.ShowAsync(this);
             InitialDirectory.Text = result;
-
-            //_appSettings.InitialDirectory = browser.SelectedPath;
-            //Load();
+            _initialDirectoryFromSettings.Value = result;
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]

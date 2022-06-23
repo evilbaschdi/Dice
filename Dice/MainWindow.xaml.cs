@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Dice.Core;
-using Dice.Properties;
+using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
@@ -23,45 +23,37 @@ namespace Dice;
 /// </summary>
 public partial class MainWindow : MetroWindow
 {
-    private readonly IAppSettings _appSettings;
-    private readonly IDicePath _dicePath;
     private readonly Dictionary<string, int> _pathClickCounter = new();
-    private readonly IProcessByPath _processByPath;
-    private readonly IScreenShot _screenShot;
+    private IDicePath _dicePath;
     private string _initialDirectory;
+    private IInitialDirectoryFromSettings _initialDirectoryFromSettings;
     private string _path;
+    private IProcessByPath _processByPath;
+    private IScreenShot _screenShot;
 
     /// <inheritdoc />
     public MainWindow()
     {
         InitializeComponent();
-
-        if (Settings.Default.UpgradeRequired)
-        {
-            Settings.Default.Upgrade();
-            Settings.Default.UpgradeRequired = false;
-            Settings.Default.Save();
-        }
-
-        IAppSettingsBase appSettingsBase = new AppSettingsBase(Settings.Default);
-        IFileListFromPath filePath = new FileListFromPath();
-
-        _screenShot = new ScreenShot();
-        _appSettings = new AppSettings(appSettingsBase);
-        _dicePath = new DicePath(filePath);
-        IRoundCorners roundCorners = new RoundCorners();
-        IApplicationStyle style = new ApplicationStyle(roundCorners, true);
-        style.Run();
-        _processByPath = new ProcessByPath();
-
         Load();
     }
 
     private void Load()
     {
-        ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_appSettings.InitialDirectory) && Directory.Exists(_appSettings.InitialDirectory));
+        _screenShot = new ScreenShot();
+        _processByPath = new ProcessByPath();
+        IFileListFromPath filePath = new FileListFromPath();
+        _dicePath = new DicePath(filePath);
 
-        _initialDirectory = _appSettings.InitialDirectory;
+        IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
+        _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile);
+
+        IRoundCorners roundCorners = new RoundCorners();
+        IApplicationStyle style = new ApplicationStyle(roundCorners, true);
+        style.Run();
+
+        _initialDirectory = _initialDirectoryFromSettings.Value;
+        ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory));
         InitialDirectory.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, _initialDirectory ?? string.Empty);
 
         ThrowTheDice.MouseRightButtonDown += ThrowTheDiceOnMouseRightButtonDown;
@@ -109,8 +101,8 @@ public partial class MainWindow : MetroWindow
 
         var intToWord = clicks == 1 ? "once" : $"{clicks.ToWords()} times";
 
-        ThrowTheDiceContent.Text =
-            $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]";
+        ThrowTheDiceContent.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
+            $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]");
     }
 
     private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
@@ -120,7 +112,7 @@ public partial class MainWindow : MetroWindow
             return;
         }
 
-        _appSettings.InitialDirectory = InitialDirectory.Text;
+        _initialDirectoryFromSettings.Value = InitialDirectory.Text;
         Load();
     }
 
@@ -131,7 +123,7 @@ public partial class MainWindow : MetroWindow
                           SelectedPath = _initialDirectory
                       };
         browser.ShowDialog();
-        _appSettings.InitialDirectory = browser.SelectedPath;
+        _initialDirectoryFromSettings.Value = browser.SelectedPath;
         Load();
     }
 
