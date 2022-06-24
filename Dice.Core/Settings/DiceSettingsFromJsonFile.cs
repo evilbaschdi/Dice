@@ -9,7 +9,7 @@ public class DiceSettingsFromJsonFile : WritableSettingsFromJsonFile, IDiceSetti
     ///     Constructor
     /// </summary>
     public DiceSettingsFromJsonFile()
-        : base("Settings\\DiceSettings.json")
+        : base("Settings/DiceSettings.json")
     {
     }
 }

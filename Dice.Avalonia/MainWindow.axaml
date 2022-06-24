@@ -7,9 +7,7 @@
         Title="Dice"
         Icon="/Assets/plainicon.ico"
         TransparencyLevelHint="Mica"
-        Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="Default">
+        Background="Transparent">
     
     <Panel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
@@ -21,11 +19,11 @@
                     MaterialOpacity="0.65" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <Panel>
+        <Panel Name="HeaderPanel" IsVisible="False">
             <TextBlock Text="Dice" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,7,0,0" />
         </Panel>
 
-        <Panel Margin="0,30,0,0">
+        <Panel Name="MainPanel" Margin="0,0,0,0">
             <!-- Browse -->
             <Label Width="35" Height="30" Margin="10,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
             <TextBox x:Name="InitialDirectory" Height="30" Margin="50,10,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />

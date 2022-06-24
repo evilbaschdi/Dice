@@ -1,7 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 using Dice.Core;
 using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
@@ -31,6 +34,16 @@ namespace Dice.Avalonia
 
         private void Load()
         {
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+            if (!isWindows)
+            {
+                ExtendClientAreaToDecorationsHint = true;
+                ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
+                HeaderPanel.IsVisible = true;
+                MainPanel.Margin = new Thickness(0, 30, 0, 0);
+            }
+
             _processByPath = new ProcessByPath();
             IFileListFromPath filePath = new FileListFromPath();
             _dicePath = new DicePath(filePath);

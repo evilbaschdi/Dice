@@ -9,7 +9,7 @@ public class CurrentDiceSettingsFromJsonFile : WritableSettingsFromJsonFile, ICu
     ///     Constructor
     /// </summary>
     public CurrentDiceSettingsFromJsonFile()
-        : base($"Settings\\DiceSettings.{Environment.MachineName}.{Environment.UserName}.json", true)
+        : base($"Settings/DiceSettings.{Environment.MachineName}.{Environment.UserName}.json", true)
     {
     }
 }
