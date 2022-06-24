@@ -36,7 +36,7 @@ namespace Dice.Avalonia
         {
             var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 
-            if (!isWindows)
+            if (isWindows)
             {
                 ExtendClientAreaToDecorationsHint = true;
                 ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
