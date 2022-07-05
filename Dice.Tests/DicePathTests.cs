@@ -9,7 +9,7 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace Dice.Core.Tests.Internal;
+namespace Dice.Core.Tests;
 
 public class DicePathTests
 {

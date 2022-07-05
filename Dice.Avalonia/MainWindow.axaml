@@ -7,20 +7,20 @@
         Title="Dice"
         Icon="/Assets/plainicon.ico"
         TransparencyLevelHint="Mica"
-        Background="Transparent">
+        Background="{x:Null}">
     
-    <Panel>
+    <Panel Name="RootPanel">
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
                     TintColor="Black"
                     TintOpacity="1"
-                    MaterialOpacity="0.65" />
+                    MaterialOpacity="0.9" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <Panel Name="HeaderPanel" IsVisible="False">
-            <TextBlock Text="Dice" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,7,0,0" />
+            <TextBlock Text="Dice" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" />
+            <!--<Button Name="About" Content="About" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,7,150,0"/>-->
         </Panel>
 
         <Panel Name="MainPanel" Margin="0,0,0,0">
