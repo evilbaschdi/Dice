@@ -1,46 +1,49 @@
 <Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250" Width="500" Height="250"
-        x:Class="Dice.Avalonia.MainWindow"
-        Title="Dice"
-        Icon="/Assets/plainicon.ico"
-        TransparencyLevelHint="Mica"
-        Background="{x:Null}">
-    
-    <Panel Name="RootPanel">
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.9" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
-        <Panel Name="HeaderPanel" IsVisible="False">
-            <TextBlock Text="Dice" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,7,0,0" />
-            <!--<Button Name="About" Content="About" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,7,150,0"/>-->
-        </Panel>
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="250" Width="500" Height="250"
+		x:Class="Dice.Avalonia.MainWindow"
+		Title="Dice"
+		Icon="/Assets/plainicon.ico"
+		TransparencyLevelHint="Mica"
+		Background="{x:Null}">
 
-        <Panel Name="MainPanel" Margin="0,0,0,0">
-            <!-- Browse -->
-            <Label Width="35" Height="30" Margin="10,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
-            <TextBox x:Name="InitialDirectory" Height="30" Margin="50,10,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
-            <!-- ReSharper disable once UnusedMember.Global -->
-            <Button Name="Browse" Margin="0,10,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseClick" Width="100" Height="30" >
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock VerticalAlignment="Center" Text="browse" />
-                </StackPanel>
-            </Button>
-            <!-- throw the dice -->
-            <Button Name="ThrowTheDice" Click="ThrowTheDiceOnClick" Margin="10,50,10,10" PointerPressed="ThrowTheDiceOnPointerPressed"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Name="ThrowTheDiceContent" VerticalAlignment="Center" Text="roll the dice" />
-                </StackPanel>
-            </Button>
-        </Panel>
-    </Panel>
+	<Panel Name="RootPanel">
+		<ExperimentalAcrylicBorder IsHitTestVisible="False">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					TintColor="Black"
+					TintOpacity="1"
+					MaterialOpacity="0.9" />
+			</ExperimentalAcrylicBorder.Material>
+		</ExperimentalAcrylicBorder>
 
+		<Panel Name="HeaderPanel" IsVisible="False">
+			<TextBlock Text="Dice" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,7,0,0" />
+		</Panel>
+
+		<Panel Name="MainPanel" Margin="0,0,0,0">
+			<Panel>
+				<Panel Name="ContentPanel" Margin="0,0,0,0">
+					<!-- Browse -->
+					<Label Width="35" Height="30" Margin="7,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
+					<TextBox x:Name="InitialDirectory" Height="30" Margin="50,7,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
+					<!-- ReSharper disable once UnusedMember.Global -->
+					<Button Name="Browse" Margin="0,10,7,0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseClick" Width="100" Height="30" >
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<TextBlock VerticalAlignment="Center" Text="browse" />
+						</StackPanel>
+					</Button>
+					<!-- throw the dice -->
+					<Button Name="ThrowTheDice" Click="ThrowTheDiceOnClick" Margin="7,47,7,7" PointerPressed="ThrowTheDiceOnPointerPressed"
+							HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<TextBlock Name="ThrowTheDiceContent" VerticalAlignment="Center" Text="roll the dice" />
+						</StackPanel>
+					</Button>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
 </Window>
