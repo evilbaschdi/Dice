@@ -1,8 +1,10 @@
 using Avalonia;
+using Avalonia.ReactiveUI;
 
 namespace Dice.Avalonia
 {
-    class Program
+    // ReSharper disable once ClassNeverInstantiated.Global
+    internal class Program
     {
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -12,9 +14,16 @@ namespace Dice.Avalonia
             .StartWithClassicDesktopLifetime(args);
 
         // Avalonia configuration, don't remove; also used by visual designer.
+        // ReSharper disable once MemberCanBePrivate.Global
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                          .UsePlatformDetect()
-                         .LogToTrace();
+                         .LogToTrace()
+                         .UseReactiveUI()
+                         .With(new Win32PlatformOptions
+                               {
+                                   UseWindowsUIComposition = false, // it's enabled by default, but breaks rounded corners since v11 
+                                   CompositionBackdropCornerRadius = 8f
+                               });
     }
 }

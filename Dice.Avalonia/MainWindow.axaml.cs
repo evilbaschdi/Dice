@@ -2,6 +2,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using Avalonia.Platform.Storage.FileIO;
 using Dice.Core;
 using Dice.Core.Settings;
 using EvilBaschdi.Avalonia.Core;
@@ -49,6 +51,7 @@ namespace Dice.Avalonia
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+        // ReSharper disable once UnusedMember.Local
         private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
         {
             // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
@@ -78,6 +81,7 @@ namespace Dice.Avalonia
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+        // ReSharper disable once UnusedMember.Local
         private void InitialDirectoryOnLostFocus(object sender, RoutedEventArgs e)
         {
             if (!Directory.Exists(InitialDirectory.Text))
@@ -90,19 +94,39 @@ namespace Dice.Avalonia
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+        // ReSharper disable once UnusedMember.Local
         private async void BrowseClick(object sender, RoutedEventArgs e)
         {
-            var browser = new OpenFolderDialog
-                          {
-                              Title = "Choose Directory to dice",
-                              Directory = _initialDirectory
-                          };
-            var result = await browser.ShowAsync(this);
-            InitialDirectory.Text = result;
-            _initialDirectoryFromSettings.Value = result;
+            var storageProvider = GetTopLevel().StorageProvider;
+
+            var folderPickerOpenOptions = new FolderPickerOpenOptions
+                                          {
+                                              Title = "Choose Directory to dice",
+                                              SuggestedStartLocation = new BclStorageFolder(_initialDirectory),
+                                              AllowMultiple = false
+                                          };
+            var folderPicker = await storageProvider.OpenFolderPickerAsync(folderPickerOpenOptions);
+
+            var storageFolder = folderPicker.FirstOrDefault();
+            var fullPath = FullPathOrName(storageFolder);
+            InitialDirectory.Text = fullPath;
+            _initialDirectoryFromSettings.Value = fullPath;
         }
 
+        private static string FullPathOrName(IStorageItem item)
+        {
+            if (item is null)
+            {
+                return "(null)";
+            }
+
+            return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
+        }
+
+        TopLevel GetTopLevel() => VisualRoot as TopLevel ?? throw new NullReferenceException("Invalid Owner");
+
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
+        // ReSharper disable once UnusedMember.Local
         private void ThrowTheDiceOnPointerPressed(object sender, PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);

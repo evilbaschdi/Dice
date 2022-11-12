@@ -1,25 +1,34 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<Authors>Sebastian Walter</Authors>
-	<Company>evilbaschdi (Sebastian Walter)</Company>
-	<Copyright>Copyright © 2015 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
-	<IsTestProject>true</IsTestProject>
-	<LangVersion>preview</LangVersion>
-	<NoWarn>1701;1702</NoWarn>
-	<PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl>
-	<Product>Dice</Product>
-	<RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
-	<TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
-	<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Authors>Sebastian Walter</Authors>
+		<Company>evilbaschdi (Sebastian Walter)</Company>
+		<Copyright>Copyright © 2015 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<IsTestProject>true</IsTestProject>
+		<LangVersion>preview</LangVersion>
+		<NoWarn>1701;1702</NoWarn>
+		<PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl>
+		<Product>Dice</Product>
+		<RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
+		<TargetFramework>net7.0</TargetFramework>
+		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EvilBaschdi.Testing" Version="2022.7.6.626-develop" />
+		<Using Include="AutoFixture.Idioms" />
+		<Using Include="EvilBaschdi.Testing" />
+		<Using Include="FluentAssertions" />
+		<Using Include="Xunit" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="coverlet.collector" Version="3.1.2">
+		<PackageReference Include="EvilBaschdi.Testing" Version="2022.11.4.1923-develop" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="3.2.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -31,7 +40,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="xunit.analyzers" Version="0.12.0-pre.24">
+		<PackageReference Include="xunit.analyzers" Version="1.1.0-pre.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -41,7 +50,7 @@
 		</PackageReference>
 	</ItemGroup>
 
-  <ItemGroup>
-	<ProjectReference Include="..\Dice\Dice.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Dice.Core\Dice.Core.csproj" />
+	</ItemGroup>
 </Project>

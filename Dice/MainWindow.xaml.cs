@@ -30,6 +30,7 @@ public partial class MainWindow : MetroWindow
     private string _path;
     private IProcessByPath _processByPath;
     private IScreenShot _screenShot;
+    private IApplicationStyle _style;
 
     /// <inheritdoc />
     public MainWindow()
@@ -49,9 +50,8 @@ public partial class MainWindow : MetroWindow
         ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile = new CurrentDiceSettingsFromJsonFile();
         _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile, currentDiceSettingsFromJsonFile);
 
-        IRoundCorners roundCorners = new RoundCorners();
-        IApplicationStyle style = new ApplicationStyle(roundCorners, true);
-        style.Run();
+        _style = new ApplicationStyle(true);
+        _style.Run();
 
         _initialDirectory = _initialDirectoryFromSettings.Value;
         ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory));
@@ -138,7 +138,7 @@ public partial class MainWindow : MetroWindow
     {
         ICurrentAssembly currentAssembly = new CurrentAssembly();
         IAboutContent aboutContent = new AboutContent(currentAssembly);
-        IAboutModel aboutModel = new AboutViewModel(aboutContent);
+        IAboutModel aboutModel = new AboutViewModel(aboutContent, _style);
         var aboutWindow = new AboutWindow(aboutModel);
 
         aboutWindow.ShowDialog();

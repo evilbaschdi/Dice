@@ -1,13 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
 using EvilBaschdi.Core.Internal;
-using EvilBaschdi.Testing;
-using FluentAssertions;
 using NSubstitute;
-using Xunit;
 
 namespace Dice.Core.Tests;
 

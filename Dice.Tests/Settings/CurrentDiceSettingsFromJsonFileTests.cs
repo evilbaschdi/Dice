@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using AutoFixture.Idioms;
-using Dice.Core.Settings;
-using EvilBaschdi.Testing;
-using FluentAssertions;
-using Xunit;
+﻿using Dice.Core.Settings;
 
 namespace Dice.Core.Tests.Settings
 {

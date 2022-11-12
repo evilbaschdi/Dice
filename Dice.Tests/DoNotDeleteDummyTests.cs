@@ -1,6 +1,4 @@
-﻿using Xunit;
-
-namespace Dice.Core.Tests
+﻿namespace Dice.Core.Tests
 {
     /// <summary>
     ///     Do not delete this class.
