@@ -10,7 +10,7 @@
         Background="{x:Null}">
 
     <Panel Name="RootPanel">
-        <ExperimentalAcrylicBorder IsHitTestVisible="False" >
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
                     TintColor="Black"
@@ -20,6 +20,9 @@
         </ExperimentalAcrylicBorder>
 
         <Panel Name="HeaderPanel" IsVisible="False">
+            <Panel Margin="7">
+                <Image Source="/Assets/plainicon.ico" Width="20" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Tapped="LogoOnTapped"/>
+            </Panel>
             <TextBlock Text="Dice" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,7,0,0" />
         </Panel>
 

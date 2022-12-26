@@ -6,10 +6,15 @@ using Avalonia.Platform.Storage;
 using Avalonia.Platform.Storage.FileIO;
 using Dice.Core;
 using Dice.Core.Settings;
+using EvilBaschdi.About.Avalonia;
+using EvilBaschdi.About.Avalonia.Models;
+using EvilBaschdi.About.Core;
 using EvilBaschdi.Avalonia.Core;
+using EvilBaschdi.Core;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
+using EvilBaschdi.Settings.ByMachineAndUser;
 
 namespace Dice.Avalonia
 {
@@ -41,9 +46,10 @@ namespace Dice.Avalonia
             IFileListFromPath filePath = new FileListFromPath();
             _dicePath = new DicePath(filePath);
 
-            IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
-            ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile = new CurrentDiceSettingsFromJsonFile();
-            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile, currentDiceSettingsFromJsonFile);
+            IAppSettingsFromJsonFile appSettingsFromJsonFile = new AppSettingsFromJsonFile();
+            IAppSettingsFromJsonFileByMachineAndUser appSettingsFromJsonFileByMachineAndUser = new AppSettingsFromJsonFileByMachineAndUser();
+            IAppSettingByKey appSettingByKey = new AppSettingByKey(appSettingsFromJsonFile, appSettingsFromJsonFileByMachineAndUser);
+            _initialDirectoryFromSettings = new InitialDirectoryFromSettings(appSettingByKey);
 
             _initialDirectory = _initialDirectoryFromSettings.Value;
             ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory);
@@ -147,6 +153,20 @@ namespace Dice.Avalonia
                     //this.ShowMessageAsync(e.GetType().ToString(), e.Message);
                 }
             }
+        }
+
+        // ReSharper disable UnusedParameter.Local
+        private void LogoOnTapped(object sender, TappedEventArgs e)
+            // ReSharper restore UnusedParameter.Local
+        {
+            ICurrentAssembly currentAssembly = new CurrentAssembly();
+            IAboutContent aboutContent = new AboutContent(currentAssembly);
+            IAboutViewModelExtended aboutViewModelExtended = new AboutViewModelExtended(aboutContent);
+            var aboutWindow = new AboutWindow
+                              {
+                                  DataContext = aboutViewModelExtended
+                              };
+            aboutWindow.ShowDialog(this);
         }
     }
 }

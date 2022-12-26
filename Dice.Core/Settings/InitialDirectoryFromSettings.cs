@@ -1,48 +1,27 @@
-﻿namespace Dice.Core.Settings;
+﻿using EvilBaschdi.Settings.ByMachineAndUser;
+
+namespace Dice.Core.Settings;
 
 /// <inheritdoc />
 public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
 {
     private const string Key = "InitialDirectory";
-    private readonly ICurrentDiceSettingsFromJsonFile _currentDiceSettingsFromJsonFile;
-    private readonly IDiceSettingsFromJsonFile _diceSettingsFromJsonFile;
+    private readonly IAppSettingByKey _appSettingByKey;
 
     /// <summary>
     ///     Constructor
     /// </summary>
-    /// <param name="diceSettingsFromJsonFile"></param>
-    /// <param name="currentDiceSettingsFromJsonFile"></param>
+    /// <param name="appSettingByKey"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public InitialDirectoryFromSettings(IDiceSettingsFromJsonFile diceSettingsFromJsonFile, ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile)
+    public InitialDirectoryFromSettings(IAppSettingByKey appSettingByKey)
     {
-        _diceSettingsFromJsonFile = diceSettingsFromJsonFile ?? throw new ArgumentNullException(nameof(diceSettingsFromJsonFile));
-        _currentDiceSettingsFromJsonFile = currentDiceSettingsFromJsonFile ?? throw new ArgumentNullException(nameof(currentDiceSettingsFromJsonFile));
+        _appSettingByKey = appSettingByKey ?? throw new ArgumentNullException(nameof(appSettingByKey));
     }
 
     /// <inheritdoc cref="string" />
-    public string Value
+    public string? Value
     {
-        get
-        {
-            var fallbackConfiguration = _diceSettingsFromJsonFile.Value;
-            var currentConfiguration = _currentDiceSettingsFromJsonFile.Value;
-
-            var fallbackInitialDirectory = fallbackConfiguration?[Key];
-            var currentInitialDirectory = currentConfiguration?[Key];
-
-            return !string.IsNullOrWhiteSpace(currentInitialDirectory)
-                ? currentInitialDirectory
-                : fallbackInitialDirectory;
-        }
-        set
-        {
-            if (value == null)
-            {
-                return;
-            }
-
-            var configuration = _currentDiceSettingsFromJsonFile.Value;
-            configuration["InitialDirectory"] = value;
-        }
+        get => _appSettingByKey.ValueFor(Key);
+        set => _appSettingByKey.RunFor(Key, value);
     }
 }

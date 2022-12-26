@@ -3,13 +3,17 @@ using System.Windows;
 using System.Windows.Input;
 using Dice.Core;
 using Dice.Core.Settings;
+using EvilBaschdi.About.Core;
+using EvilBaschdi.About.Core.Models;
+using EvilBaschdi.About.Wpf;
+using EvilBaschdi.Core;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.CoreExtended;
 using EvilBaschdi.CoreExtended.AppHelpers;
 using EvilBaschdi.CoreExtended.Browsers;
-using EvilBaschdi.CoreExtended.Controls.About;
+using EvilBaschdi.Settings.ByMachineAndUser;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -30,7 +34,6 @@ public partial class MainWindow : MetroWindow
     private string _path;
     private IProcessByPath _processByPath;
     private IScreenShot _screenShot;
-    private IApplicationStyle _style;
 
     /// <inheritdoc />
     public MainWindow()
@@ -46,12 +49,13 @@ public partial class MainWindow : MetroWindow
         IFileListFromPath filePath = new FileListFromPath();
         _dicePath = new DicePath(filePath);
 
-        IDiceSettingsFromJsonFile diceSettingsFromJsonFile = new DiceSettingsFromJsonFile();
-        ICurrentDiceSettingsFromJsonFile currentDiceSettingsFromJsonFile = new CurrentDiceSettingsFromJsonFile();
-        _initialDirectoryFromSettings = new InitialDirectoryFromSettings(diceSettingsFromJsonFile, currentDiceSettingsFromJsonFile);
+        IAppSettingsFromJsonFile appSettingsFromJsonFile = new AppSettingsFromJsonFile();
+        IAppSettingsFromJsonFileByMachineAndUser appSettingsFromJsonFileByMachineAndUser = new AppSettingsFromJsonFileByMachineAndUser();
+        IAppSettingByKey appSettingByKey = new AppSettingByKey(appSettingsFromJsonFile, appSettingsFromJsonFileByMachineAndUser);
+        _initialDirectoryFromSettings = new InitialDirectoryFromSettings(appSettingByKey);
 
-        _style = new ApplicationStyle(true);
-        _style.Run();
+        IApplicationStyle applicationStyle = new ApplicationStyle(true);
+        applicationStyle.Run();
 
         _initialDirectory = _initialDirectoryFromSettings.Value;
         ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory));
@@ -138,7 +142,7 @@ public partial class MainWindow : MetroWindow
     {
         ICurrentAssembly currentAssembly = new CurrentAssembly();
         IAboutContent aboutContent = new AboutContent(currentAssembly);
-        IAboutModel aboutModel = new AboutViewModel(aboutContent, _style);
+        IAboutModel aboutModel = new AboutViewModel(aboutContent);
         var aboutWindow = new AboutWindow(aboutModel);
 
         aboutWindow.ShowDialog();
