@@ -73,10 +73,7 @@ namespace Dice.Avalonia
             await task.ConfigureAwait(true);
             _path = task.Result;
 
-            if (!_pathClickCounter.ContainsKey(_path))
-            {
-                _pathClickCounter.Add(_path, 1);
-            }
+            _pathClickCounter.TryAdd(_path, 1);
 
             var clicks = _pathClickCounter[_path];
             _pathClickCounter[_path] += 1;
