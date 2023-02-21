@@ -10,9 +10,9 @@ using EvilBaschdi.Core;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Extensions;
 using EvilBaschdi.Core.Internal;
-using EvilBaschdi.CoreExtended;
-using EvilBaschdi.CoreExtended.AppHelpers;
-using EvilBaschdi.CoreExtended.Browsers;
+using EvilBaschdi.Core.Wpf;
+using EvilBaschdi.Core.Wpf.AppHelpers;
+using EvilBaschdi.Core.Wpf.Browsers;
 using EvilBaschdi.Settings.ByMachineAndUser;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -139,8 +139,9 @@ public partial class MainWindow : MetroWindow
     {
         ICurrentAssembly currentAssembly = new CurrentAssembly();
         IAboutContent aboutContent = new AboutContent(currentAssembly);
-        IAboutModel aboutModel = new AboutViewModel(aboutContent);
-        var aboutWindow = new AboutWindow(aboutModel);
+        IAboutViewModel aboutModel = new AboutViewModel(aboutContent);
+        IApplyMicaBrush applyMicaBrush = new ApplyMicaBrush();
+        var aboutWindow = new AboutWindow(aboutModel, applyMicaBrush);
 
         aboutWindow.ShowDialog();
     }

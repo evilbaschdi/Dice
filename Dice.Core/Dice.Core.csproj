@@ -11,8 +11,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EvilBaschdi.Core" Version="2023.2.1.1815-develop" />
-		<PackageReference Include="EvilBaschdi.Settings" Version="2023.2.1.1923-develop" />
+		<PackageReference Include="EvilBaschdi.Core" Version="2023.2.21.1731" />
+		<PackageReference Include="EvilBaschdi.Settings" Version="2023.2.21.1756" />
 	</ItemGroup>
 
 	<ItemGroup>
