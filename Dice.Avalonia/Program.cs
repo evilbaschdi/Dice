@@ -1,5 +1,5 @@
 using Avalonia;
-using Avalonia.ReactiveUI;
+using EvilBaschdi.Core.Avalonia;
 
 namespace Dice.Avalonia;
 
@@ -16,13 +16,5 @@ internal class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     // ReSharper disable once MemberCanBePrivate.Global
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-                     .UsePlatformDetect()
-                     .LogToTrace()
-                     .UseReactiveUI()
-                     .With(new Win32PlatformOptions
-                           {
-                               UseWindowsUIComposition = true,
-                               CompositionBackdropCornerRadius = 8f
-                           });
+        => new AppBuilderImplementation<App>().Value;
 }

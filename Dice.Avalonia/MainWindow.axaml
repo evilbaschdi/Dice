@@ -7,10 +7,10 @@
         Title="Dice"
         Icon="/Assets/plainicon.ico"
         TransparencyLevelHint="Mica"
-        Background="{x:Null}">
+        Background="Transparent">
 
     <Panel Name="RootPanel">
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+        <ExperimentalAcrylicBorder IsHitTestVisible="False" Name="AcrylicBorder">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
                     TintColor="Black"
