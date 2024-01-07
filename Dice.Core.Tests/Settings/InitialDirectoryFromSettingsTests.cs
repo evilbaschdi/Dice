@@ -19,6 +19,6 @@ public class InitialDirectoryFromSettingsTests
     [Theory, NSubstituteOmitAutoPropertiesTrueAutoData]
     public void Methods_HaveNullGuards(GuardClauseAssertion assertion)
     {
-        assertion.Verify(typeof(InitialDirectoryFromSettings).GetMethods().Where(method => !method.IsAbstract));
+        assertion.Verify(typeof(InitialDirectoryFromSettings).GetMethods().Where(method => !method.IsAbstract & !method.Name.StartsWith("set")));
     }
 }

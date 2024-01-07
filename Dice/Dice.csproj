@@ -2,21 +2,8 @@
 
 	<PropertyGroup>
 		<ApplicationIcon>plainicon.ico</ApplicationIcon>
-		<Authors>Sebastian Walter</Authors>
-		<Company>evilbaschdi (Sebastian Walter)</Company>
-		<Copyright>Copyright © 2015 - $([System.DateTime]::UtcNow.ToString(yyyy)) evilbaschdi</Copyright>
-		<!-- ReSharper disable once UnknownProperty -->
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>preview</LangVersion>
 		<OutputType>WinExe</OutputType>
-		<Product>Dice</Product>
-		<PublishSingleFile>true</PublishSingleFile>
-		<RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
-		<TargetFramework>net7.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
-		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,23 +33,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="4.11.0" />
-		<PackageReference Include="EvilBaschdi.Core.Wpf" Version="2023.3.9.1808-develop" />
-		<PackageReference Include="EvilBaschdi.About.Wpf" Version="2023.4.10.1419-develop" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.1.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="WpfAnalyzers" Version="4.1.1">
+		<PackageReference Include="MahApps.Metro.IconPacks.Material" />
+		<PackageReference Include="EvilBaschdi.Core.Wpf" />
+		<PackageReference Include="EvilBaschdi.About.Wpf" />
+		<PackageReference Include="WpfAnalyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Dice.Core\Dice.Core.csproj" />
-	</ItemGroup>
+
 </Project>

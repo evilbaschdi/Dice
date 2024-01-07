@@ -1,4 +1,6 @@
-﻿namespace Dice.Core.Tests;
+﻿#pragma warning disable FluentAssertions0704
+#pragma warning disable MFA001
+namespace Dice.Core.Tests;
 
 /// <summary>
 ///     Do not delete this class.

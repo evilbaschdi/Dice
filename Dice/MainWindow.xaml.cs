@@ -54,8 +54,10 @@ public partial class MainWindow : MetroWindow
         IAppSettingByKey appSettingByKey = new AppSettingByKey(appSettingsFromJsonFile, appSettingsFromJsonFileByMachineAndUser);
         _initialDirectoryFromSettings = new InitialDirectoryFromSettings(appSettingByKey);
 
-        IApplicationStyle applicationStyle = new ApplicationStyle(true);
+        IApplicationStyle applicationStyle = new ApplicationStyle();
+        IApplicationLayout applicationLayout = new ApplicationLayout();
         applicationStyle.Run();
+        applicationLayout.RunFor((true, false));
 
         _initialDirectory = _initialDirectoryFromSettings.Value;
         ThrowTheDice.SetCurrentValue(IsEnabledProperty, !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory));
@@ -92,9 +94,7 @@ public partial class MainWindow : MetroWindow
 
     private async Task RunDiceAsync()
     {
-        var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectory));
-        await task.ConfigureAwait(true);
-        _path = task.Result;
+        _path = await _dicePath.ValueFor(_initialDirectory);
 
         _pathClickCounter.TryAdd(_path, 1);
 
@@ -141,7 +141,8 @@ public partial class MainWindow : MetroWindow
         IAboutContent aboutContent = new AboutContent(currentAssembly);
         IAboutViewModel aboutModel = new AboutViewModel(aboutContent);
         IApplyMicaBrush applyMicaBrush = new ApplyMicaBrush();
-        var aboutWindow = new AboutWindow(aboutModel, applyMicaBrush);
+        IApplicationLayout applicationLayout = new ApplicationLayout();
+        var aboutWindow = new AboutWindow(aboutModel, applicationLayout, applyMicaBrush);
 
         aboutWindow.ShowDialog();
     }

@@ -3,6 +3,6 @@
 namespace Dice.Core;
 
 /// <inheritdoc />
-public interface IDicePath : ITaskOfWithInjection<string, string>
+public interface IRollTheDice : ITaskOfFromMethod<string>
 {
 }

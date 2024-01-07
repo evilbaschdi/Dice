@@ -18,19 +18,24 @@ public class DicePath : IDicePath
     }
 
     /// <inheritdoc />
-    public Func<string> ValueFor(string initialDirectory)
+    public async Task<string> ValueFor(string initialDirectory)
     {
         if (initialDirectory == null)
         {
             throw new ArgumentNullException(nameof(initialDirectory));
         }
 
-        return () =>
-               {
-                   var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory).ToList();
-                   var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
+        return await Task.Run(() =>
+                              {
+                                  var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory)?.ToList();
+                                  if (folderList == null || !folderList.Any())
+                                  {
+                                      return "directory is empty";
+                                  }
 
-                   return folderList[index];
-               };
+                                  var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
+
+                                  return folderList[index];
+                              });
     }
 }

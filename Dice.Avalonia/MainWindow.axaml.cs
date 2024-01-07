@@ -3,29 +3,24 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Dice.Avalonia.ViewModels;
 using Dice.Core;
 using Dice.Core.Settings;
-using EvilBaschdi.About.Avalonia;
-using EvilBaschdi.About.Avalonia.Models;
-using EvilBaschdi.About.Core;
-using EvilBaschdi.Core;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Avalonia;
-using EvilBaschdi.Core.Extensions;
-using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Settings.ByMachineAndUser;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia;
 
 /// <inheritdoc />
 public partial class MainWindow : Window
 {
-    private readonly Dictionary<string, int> _pathClickCounter = new();
-    private IDicePath _dicePath;
     private string _initialDirectory;
     private IInitialDirectoryFromSettings _initialDirectoryFromSettings;
-    private string _path;
     private IProcessByPath _processByPath;
+    private readonly IHandleOsDependentTitleBar _handleOsDependentTitleBar;
+    private readonly IApplicationLayout _applicationLayout;
 
     /// <summary>
     ///     Constructor
@@ -33,53 +28,36 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        _handleOsDependentTitleBar = App.ServiceProvider.GetRequiredService<IHandleOsDependentTitleBar>();
+        _applicationLayout = App.ServiceProvider.GetRequiredService<IApplicationLayout>();
+
+        var topLevel = App.ServiceProvider.GetRequiredService<ITopLevel>();
+        topLevel.Value = VisualRoot as TopLevel ?? throw new NullReferenceException("Invalid Owner");
+
+        ApplyLayout();
         Load();
+    }
+
+    private void ApplyLayout()
+    {
+        _handleOsDependentTitleBar.RunFor(this);
+        _applicationLayout.RunFor((this, true, false));
     }
 
     private void Load()
     {
-        IHandleOsDependentTitleBar handleOsDependentTitleBar = new HandleOsDependentTitleBar();
-        handleOsDependentTitleBar.RunFor((this, HeaderPanel, MainPanel, AcrylicBorder));
-
         _processByPath = new ProcessByPath();
-        IFileListFromPath filePath = new FileListFromPath();
-        _dicePath = new DicePath(filePath);
 
         IAppSettingsFromJsonFile appSettingsFromJsonFile = new AppSettingsFromJsonFile();
         IAppSettingsFromJsonFileByMachineAndUser appSettingsFromJsonFileByMachineAndUser = new AppSettingsFromJsonFileByMachineAndUser();
         IAppSettingByKey appSettingByKey = new AppSettingByKey(appSettingsFromJsonFile, appSettingsFromJsonFileByMachineAndUser);
+
         _initialDirectoryFromSettings = new InitialDirectoryFromSettings(appSettingByKey);
 
         _initialDirectory = _initialDirectoryFromSettings.Value;
         ThrowTheDice.IsEnabled = !string.IsNullOrWhiteSpace(_initialDirectory) && Directory.Exists(_initialDirectory);
         InitialDirectory.Text = _initialDirectory;
-    }
-
-    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    // ReSharper disable once UnusedMember.Local
-    private async void ThrowTheDiceOnClick(object sender, RoutedEventArgs e)
-    {
-        // ReSharper disable once AsyncConverter.AsyncAwaitMayBeElidedHighlighting
-
-        await RunDiceAsync().ConfigureAwait(true);
-    }
-
-    private async Task RunDiceAsync()
-    {
-        //await MessageBox.Show(this, "Test", "Test title", MessageBox.MessageBoxButtons.YesNoCancel);
-
-        var task = Task<string>.Factory.StartNew(_dicePath.ValueFor(_initialDirectoryFromSettings.Value));
-        await task.ConfigureAwait(true);
-        _path = task.Result;
-
-        _pathClickCounter.TryAdd(_path, 1);
-
-        var clicks = _pathClickCounter[_path];
-        _pathClickCounter[_path] += 1;
-
-        var intToWord = clicks == 1 ? "once" : $"{clicks.ToWords()} times";
-
-        ThrowTheDiceContent.Text = $"'{_path}'{Environment.NewLine}(diced {intToWord}){Environment.NewLine}[roll the dice again]";
     }
 
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
@@ -117,12 +95,7 @@ public partial class MainWindow : Window
 
     private static string FullPathOrName(IStorageItem item)
     {
-        if (item is null)
-        {
-            return "(null)";
-        }
-
-        return item.Path.LocalPath;
+        return item is null ? "(null)" : item.Path.LocalPath;
 
         //return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
     }
@@ -135,12 +108,14 @@ public partial class MainWindow : Window
     {
         base.OnPointerPressed(e);
 
+        var dicedPath = App.ServiceProvider.GetRequiredService<IRollTheDiceResultPath>()?.Value;
+
         var propertiesPointerUpdateKind = e.GetCurrentPoint(this).Properties.PointerUpdateKind;
         if (propertiesPointerUpdateKind == PointerUpdateKind.RightButtonPressed)
         {
             try
             {
-                var path = _path ?? _initialDirectory;
+                var path = dicedPath ?? _initialDirectory;
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     _processByPath.RunFor(path);
@@ -151,19 +126,5 @@ public partial class MainWindow : Window
                 //this.ShowMessageAsync(e.GetType().ToString(), e.Message);
             }
         }
-    }
-
-    // ReSharper disable UnusedParameter.Local
-    private void LogoOnTapped(object sender, TappedEventArgs e)
-        // ReSharper restore UnusedParameter.Local
-    {
-        ICurrentAssembly currentAssembly = new CurrentAssembly();
-        IAboutContent aboutContent = new AboutContent(currentAssembly);
-        IAboutViewModelExtended aboutViewModelExtended = new AboutViewModelExtended(aboutContent);
-        var aboutWindow = new AboutWindow
-                          {
-                              DataContext = aboutViewModelExtended
-                          };
-        aboutWindow.ShowDialog(this);
     }
 }

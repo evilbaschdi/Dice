@@ -19,7 +19,7 @@ public class InitialDirectoryFromSettings : IInitialDirectoryFromSettings
     }
 
     /// <inheritdoc cref="string" />
-    public string? Value
+    public string Value
     {
         get => _appSettingByKey.ValueFor(Key);
         set => _appSettingByKey.RunFor(Key, value);
