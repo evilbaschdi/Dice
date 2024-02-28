@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Runtime.InteropServices;
 using EvilBaschdi.Core.Internal;
 
 namespace Dice.Core;
@@ -33,9 +33,10 @@ public class DicePath : IDicePath
                                       return "directory is empty";
                                   }
 
-                                  var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
+                                  var span = CollectionsMarshal.AsSpan(folderList);
+                                  Random.Shared.Shuffle(span);
 
-                                  return folderList[index];
+                                  return span[0];
                               });
     }
 }
