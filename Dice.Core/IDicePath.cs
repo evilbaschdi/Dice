@@ -3,6 +3,4 @@
 namespace Dice.Core;
 
 /// <inheritdoc />
-public interface IDicePath : ITaskOfWithInjection<string, string>
-{
-}
+public interface IDicePath : ITaskOfWithInjection<string, string>;

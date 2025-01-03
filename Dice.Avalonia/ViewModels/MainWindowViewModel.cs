@@ -18,7 +18,7 @@ public class MainWindowViewModel : ViewModelBase
 {
     private readonly IRollTheDice _rollTheDice;
     private readonly ITopLevel _topLevel;
-    [NotNull] private readonly IInitialDirectoryFromSettings _initialDirectoryFromSettings;
+    private readonly IInitialDirectoryFromSettings _initialDirectoryFromSettings;
     private string _throwTheDiceContentText = "roll the dice";
 
     /// <summary>

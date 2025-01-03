@@ -4,6 +4,4 @@ using EvilBaschdi.Core;
 namespace Dice.Avalonia.ViewModels;
 
 /// <inheritdoc />
-public interface ITopLevel : IWritableValue<TopLevel>
-{
-}
+public interface ITopLevel : IWritableValue<TopLevel>;

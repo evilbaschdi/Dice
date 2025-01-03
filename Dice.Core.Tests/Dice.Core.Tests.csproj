@@ -16,6 +16,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="EvilBaschdi.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="coverlet.collector">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Update="FluentAssertions.Analyzers">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -23,6 +31,10 @@
 	  <PackageReference Update="Meziantou.FluentAssertionsAnalyzers">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Update="NSubstitute.Analyzers.CSharp">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Update="xunit.analyzers">
 	    <PrivateAssets>all</PrivateAssets>

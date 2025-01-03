@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+﻿using System.Runtime.InteropServices;
 using EvilBaschdi.Core.Internal;
 
 namespace Dice.Core;
@@ -20,22 +20,21 @@ public class DicePath : IDicePath
     /// <inheritdoc />
     public async Task<string> ValueFor(string initialDirectory)
     {
-        if (initialDirectory == null)
-        {
-            throw new ArgumentNullException(nameof(initialDirectory));
-        }
+        return initialDirectory == null
+            ? throw new ArgumentNullException(nameof(initialDirectory))
+            : await Task.Run(() =>
+                             {
+                                 var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory)?.ToList();
+                                 if (folderList == null || folderList.Count == 0)
+                                 {
+                                     return "directory is empty";
+                                 }
 
-        return await Task.Run(() =>
-                              {
-                                  var folderList = _filePath.GetSubdirectoriesContainingOnlyFiles(initialDirectory)?.ToList();
-                                  if (folderList == null || !folderList.Any())
-                                  {
-                                      return "directory is empty";
-                                  }
+                                 var folderSpan = CollectionsMarshal.AsSpan(folderList);
 
-                                  var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
+                                 Random.Shared.Shuffle(folderSpan);
 
-                                  return folderList[index];
-                              });
+                                 return folderSpan[0];
+                             });
     }
 }

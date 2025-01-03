@@ -4,7 +4,6 @@ using Avalonia.Markup.Xaml;
 using Dice.Avalonia.DependencyInjection;
 using Dice.Avalonia.ViewModels;
 using EvilBaschdi.About.Avalonia.DependencyInjection;
-using EvilBaschdi.About.Core.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia;
@@ -29,15 +28,10 @@ public class App : Application
     {
         IServiceCollection serviceCollection = new ServiceCollection();
 
-        IConfigureCoreServices configureCoreServices = new ConfigureCoreServices();
-        IConfigureAboutServices configureAboutServices = new ConfigureAboutServices();
-        IConfigureAvaloniaServices configureAvaloniaServices = new ConfigureAvaloniaServices();
-        IConfigureWindowsAndViewModels configureWindowsAndViewModels = new ConfigureWindowsAndViewModels();
-
-        configureCoreServices.RunFor(serviceCollection);
-        configureAboutServices.RunFor(serviceCollection);
-        configureAvaloniaServices.RunFor(serviceCollection);
-        configureWindowsAndViewModels.RunFor(serviceCollection);
+        serviceCollection.AddCoreServices();
+        serviceCollection.AddAboutServices();
+        serviceCollection.AddAvaloniaServices();
+        serviceCollection.AddWindowsAndViewModels();
 
         ServiceProvider = serviceCollection.BuildServiceProvider();
 

@@ -33,8 +33,8 @@
         <Panel Name="MainPanel" Margin="0,0,0,0">
             <Panel Name="ContentPanel" Margin="0,7,0,0">
                 <!-- Browse -->
-                <Label Width="35" Height="30" Margin="7,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
-                <TextBox x:Name="InitialDirectory" Height="30" Margin="50,7,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus"
+                <Label Width="35" Margin="7,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
+                <TextBox x:Name="InitialDirectory" Margin="50,7,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus"
                          VerticalContentAlignment="Center" />
                 <!-- ReSharper disable once UnusedMember.Global -->
                 <Button Name="Browse" Margin="0,10,7,0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseClick" Width="100" Height="30">
@@ -44,7 +44,7 @@
                 </Button>
                 <!-- throw the dice -->
                 <!-- ReSharper disable once Xaml.StyleClassNotFound -->
-                <Button Name="ThrowTheDice" Command="{Binding ThrowTheDiceCommand}" Margin="7,47,7,7" Classes="accent"
+                <Button Name="ThrowTheDice" Command="{Binding ThrowTheDiceCommand}" Margin="7,47,7,7"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerPressed="ThrowTheDiceOnPointerPressed">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Name="ThrowTheDiceContent" VerticalAlignment="Center" Text="{Binding ThrowTheDiceContentText}" />

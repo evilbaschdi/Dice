@@ -3,6 +3,4 @@
 namespace Dice.Core;
 
 /// <inheritdoc />
-public interface IRollTheDice : ITaskOfFromMethod<string>
-{
-}
+public interface IRollTheDice : ITaskOfFromMethod<string>;

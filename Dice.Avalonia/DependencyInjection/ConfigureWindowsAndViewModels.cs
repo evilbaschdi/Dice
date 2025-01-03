@@ -2,21 +2,20 @@
 using EvilBaschdi.About.Avalonia;
 using EvilBaschdi.About.Avalonia.Models;
 using EvilBaschdi.Core.Avalonia;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia.DependencyInjection;
 
-/// <inheritdoc />
-public class ConfigureWindowsAndViewModels : IConfigureWindowsAndViewModels
+/// <summary />
+public static class ConfigureWindowsAndViewModels
 {
-    /// <inheritdoc />
-    public void RunFor([NotNull] IServiceCollection services)
+    /// <summary />
+    public static void AddWindowsAndViewModels(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddSingleton<IAboutViewModelExtended, AboutViewModelExtended>();
-        services.AddTransient(typeof(AboutWindow));
+        services.AddTransient<AboutWindow>();
 
         services.AddSingleton<IHandleOsDependentTitleBar, HandleOsDependentTitleBar>();
         services.AddSingleton<IApplicationLayout, ApplicationLayout>();

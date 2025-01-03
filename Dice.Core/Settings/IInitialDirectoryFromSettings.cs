@@ -3,6 +3,4 @@
 namespace Dice.Core.Settings;
 
 /// <inheritdoc />
-public interface IInitialDirectoryFromSettings : IWritableValue<string>
-{
-}
+public interface IInitialDirectoryFromSettings : IWritableValue<string>;

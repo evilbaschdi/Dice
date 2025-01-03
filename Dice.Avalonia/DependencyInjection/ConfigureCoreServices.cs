@@ -3,16 +3,15 @@ using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Internal;
 using EvilBaschdi.Settings.ByMachineAndUser;
-using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia.DependencyInjection;
 
-/// <inheritdoc />
-public class ConfigureCoreServices : IConfigureCoreServices
+/// <summary />
+public static class ConfigureCoreServices
 {
-    /// <inheritdoc />
-    public void RunFor([NotNull] IServiceCollection services)
+    /// <summary />
+    public static void AddCoreServices(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
 
