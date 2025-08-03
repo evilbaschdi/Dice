@@ -20,7 +20,6 @@
 		<PackageReference Include="EvilBaschdi.About.Avalonia" />
 		<PackageReference Include="EvilBaschdi.Core" />
 		<PackageReference Include="EvilBaschdi.Core.Avalonia" />
-		<PackageReference Include="FluentAvaloniaUI" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" />
 	</ItemGroup>
@@ -30,16 +29,9 @@
 		<Content Include="Assets\about.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<Resource Include="Assets\plainicon.ico">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Resource>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Internal\" />
 	</ItemGroup>
 
 </Project>

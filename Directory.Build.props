@@ -16,26 +16,14 @@
 		<PublishSingleFile>true</PublishSingleFile>
 		<RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
 		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+		<TargetFrameworks>net9.0</TargetFrameworks>
 		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
 	</PropertyGroup>
-
-	<Choose>
-		<When Condition="$(MSBuildProjectName.Equals('Dice'))">
-			<PropertyGroup>
-				<TargetFrameworks>net0.0-windows</TargetFrameworks>
-			</PropertyGroup>
-		</When>
-		<Otherwise>
-			<PropertyGroup>
-				<TargetFrameworks>net0.0</TargetFrameworks>
-			</PropertyGroup>
-		</Otherwise>
-	</Choose>
 
 	<!-- ReSharper disable once UnknownProperty -->
 	<ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
 		<Using Include="AutoFixture.Idioms" />
-		<Using Include="AutoFixture.Xunit2" />
+		<Using Include="AutoFixture.Xunit3" />
 		<Using Include="EvilBaschdi.Testing" />
 		<Using Include="FluentAssertions" />
 		<Using Include="FluentAssertions.Microsoft.Extensions.DependencyInjection" />
@@ -49,11 +37,13 @@
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 		<NoWarn>1701;1702</NoWarn>
+		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 
 	<!-- ReSharper disable once UnknownProperty -->
 	<ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
 		<PackageReference Include="EvilBaschdi.Testing" />
+		<PackageReference Include="xunit.v3" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="coverlet.collector">
 			<PrivateAssets>all</PrivateAssets>
@@ -72,10 +62,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="xunit.analyzers">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="xunit.runner.console">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

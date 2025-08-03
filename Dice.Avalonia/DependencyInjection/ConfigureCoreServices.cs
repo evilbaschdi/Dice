@@ -2,7 +2,7 @@
 using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Internal;
-using EvilBaschdi.Settings.ByMachineAndUser;
+using EvilBaschdi.Core.Settings.ByMachineAndUser;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia.DependencyInjection;

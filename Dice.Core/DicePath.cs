@@ -1,4 +1,4 @@
-using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using EvilBaschdi.Core.Internal;
 
 namespace Dice.Core;
@@ -18,7 +18,7 @@ public class DicePath : IDicePath
     }
 
     /// <inheritdoc />
-    public async Task<string> ValueFor(string initialDirectory)
+    public async Task<string> ValueForAsync(string initialDirectory)
     {
         return initialDirectory == null
             ? throw new ArgumentNullException(nameof(initialDirectory))
@@ -30,9 +30,9 @@ public class DicePath : IDicePath
                                      return "directory is empty";
                                  }
 
-                                  var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
+                                 var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
 
-                                  return folderList[index];
-                              });
+                                 return folderList[index];
+                             });
     }
 }

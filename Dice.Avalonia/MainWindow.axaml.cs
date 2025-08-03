@@ -8,7 +8,7 @@ using Dice.Core;
 using Dice.Core.Settings;
 using EvilBaschdi.Core.AppHelpers;
 using EvilBaschdi.Core.Avalonia;
-using EvilBaschdi.Settings.ByMachineAndUser;
+using EvilBaschdi.Core.Settings.ByMachineAndUser;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Dice.Avalonia;
@@ -93,14 +93,10 @@ public partial class MainWindow : Window
         _initialDirectoryFromSettings.Value = fullPath;
     }
 
-    private static string FullPathOrName(IStorageItem item)
-    {
-        return item is null ? "(null)" : item.Path.LocalPath;
+    private static string FullPathOrName(IStorageItem item) => item is null ? "(null)" : item.Path.LocalPath;
 
-        //return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
-    }
-
-    TopLevel GetTopLevel() => VisualRoot as TopLevel ?? throw new NullReferenceException("Invalid Owner");
+    //return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
+    private TopLevel GetTopLevel() => VisualRoot as TopLevel ?? throw new NullReferenceException("Invalid Owner");
 
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     // ReSharper disable once UnusedMember.Local

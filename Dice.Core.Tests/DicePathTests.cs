@@ -26,7 +26,7 @@ public class DicePathTests
         fileListFromPath.GetSubdirectoriesContainingOnlyFiles(dummyInitialDirectory).ReturnsNull();
 
         // Act
-        var result = await sut.ValueFor(dummyInitialDirectory);
+        var result = await sut.ValueForAsync(dummyInitialDirectory);
 
         // Assert
         result.Should().Be("directory is empty");
@@ -42,7 +42,7 @@ public class DicePathTests
         fileListFromPath.GetSubdirectoriesContainingOnlyFiles(dummyInitialDirectory).Returns(new List<string>());
 
         // Act
-        var result = await sut.ValueFor(dummyInitialDirectory);
+        var result = await sut.ValueForAsync(dummyInitialDirectory);
 
         // Assert
         result.Should().Be("directory is empty");
@@ -63,7 +63,7 @@ public class DicePathTests
         fileListFromPath.GetSubdirectoriesContainingOnlyFiles(dummyInitialDirectory).Returns(dummyFolderList);
 
         // Act
-        var result = await sut.ValueFor(dummyInitialDirectory);
+        var result = await sut.ValueForAsync(dummyInitialDirectory);
 
         // Assert
         dummyFolderList.Should().Contain(result);

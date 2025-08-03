@@ -33,10 +33,10 @@ public class RollTheDiceTests
     {
         // Arrange
         initialDirectoryFromSettings.Value.Returns(dummyInitialDirectoryFromSettings);
-        dicePath.ValueFor(dummyInitialDirectoryFromSettings).Returns(Task.FromResult(dummyResult));
+        dicePath.ValueForAsync(dummyInitialDirectoryFromSettings).Returns(Task.FromResult(dummyResult));
 
         // Act
-        var result = await sut.Value();
+        var result = await sut.ValueAsync();
 
         // Assert
         rollTheDiceResultPath.Value.Should().Be(dummyResult);

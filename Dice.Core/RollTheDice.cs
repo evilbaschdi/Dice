@@ -29,9 +29,9 @@ public class RollTheDice : IRollTheDice
     }
 
     /// <inheritdoc />
-    public async Task<string> Value()
+    public async Task<string> ValueAsync()
     {
-        var path = await _dicePath.ValueFor(_initialDirectoryFromSettings.Value);
+        var path = await _dicePath.ValueForAsync(_initialDirectoryFromSettings.Value);
 
         _pathClickCounter.TryAdd(path, 1);
 

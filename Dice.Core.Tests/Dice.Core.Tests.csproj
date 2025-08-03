@@ -12,7 +12,7 @@
 		<PackageProjectUrl>https://github.com/evilbaschdi/Dice</PackageProjectUrl>
 		<Product>Dice</Product>
 		<RepositoryUrl>https://github.com/evilbaschdi/Dice</RepositoryUrl>
-		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.Hmm))</Version>
+		<Version>$([System.DateTime]::UtcNow.ToString(yyyy.M.d.H))</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -22,7 +22,7 @@
 	<ItemGroup>
 	  <PackageReference Update="coverlet.collector">
 	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Update="FluentAssertions.Analyzers">
 	    <PrivateAssets>all</PrivateAssets>
@@ -34,19 +34,19 @@
 	  </PackageReference>
 	  <PackageReference Update="NSubstitute.Analyzers.CSharp">
 	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Update="xunit.analyzers">
 	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Update="xunit.runner.console">
 	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Update="xunit.runner.visualstudio">
 	    <PrivateAssets>all</PrivateAssets>
-	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 	  </PackageReference>
 	</ItemGroup>
 

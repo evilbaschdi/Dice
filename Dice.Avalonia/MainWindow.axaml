@@ -6,9 +6,8 @@
         x:Class="Dice.Avalonia.MainWindow"
         Title="Dice"
         Icon="/Assets/plainicon.ico"
-        TransparencyLevelHint="Mica"
-        CanResize="False"
-        Background="Transparent">
+
+        CanResize="False">
 
     <Panel Name="RootPanel">
         <ExperimentalAcrylicBorder IsHitTestVisible="False" Name="AcrylicBorder">
@@ -22,6 +21,7 @@
                 <Button VerticalAlignment="Top" HorizontalAlignment="Left" Background="Transparent" Command="{Binding AboutWindowCommand}">
                     <StackPanel Orientation="Horizontal">
                         <ContentControl>
+                            <!-- ReSharper disable once Xaml.PathError -->
                             <Image Source="/Assets/plainicon.ico" Width="20" Height="20" />
                         </ContentControl>
                         <TextBlock Text="Dice" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,0,0,0" />

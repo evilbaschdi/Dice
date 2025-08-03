@@ -19,7 +19,6 @@ public class MainWindowViewModel : ViewModelBase
     private readonly IRollTheDice _rollTheDice;
     private readonly ITopLevel _topLevel;
     private readonly IInitialDirectoryFromSettings _initialDirectoryFromSettings;
-    private string _throwTheDiceContentText = "roll the dice";
 
     /// <summary>
     ///     Gets or Sets the about window command.
@@ -41,21 +40,21 @@ public class MainWindowViewModel : ViewModelBase
     /// </summary>
     public string ThrowTheDiceContentText
     {
-        get => _throwTheDiceContentText;
-        set => this.RaiseAndSetIfChanged(ref _throwTheDiceContentText, value);
-    }
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    } = "roll the dice";
 
-    private void AboutWindowCommandAction()
+    private async Task AboutWindowCommandAction()
     {
         var aboutWindow = App.ServiceProvider.GetRequiredService<AboutWindow>();
         var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
         if (mainWindow != null)
         {
-            aboutWindow.ShowDialog(mainWindow);
+            await aboutWindow.ShowDialog(mainWindow);
         }
     }
 
-    private async void BrowseInitialDirectoryCommandAction()
+    private async Task BrowseInitialDirectoryCommandAction()
     {
         var storageProvider = _topLevel.Value.StorageProvider;
 
@@ -75,16 +74,12 @@ public class MainWindowViewModel : ViewModelBase
         _initialDirectoryFromSettings.Value = fullPath;
     }
 
-    private static string FullPathOrName(IStorageItem item)
-    {
-        return item is null ? "(null)" : item.Path.LocalPath;
+    private static string FullPathOrName(IStorageItem item) => item is null ? "(null)" : item.Path.LocalPath;
 
-        //return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
-    }
-
+    //return item.TryGetUri(out var uri) ? uri.LocalPath : item.Name;
     private async Task ThrowTheDiceCommandAction()
     {
-        ThrowTheDiceContentText = await _rollTheDice.Value();
+        ThrowTheDiceContentText = await _rollTheDice.ValueAsync();
     }
 
     /// <summary>
@@ -98,8 +93,8 @@ public class MainWindowViewModel : ViewModelBase
         _rollTheDice = rollTheDice ?? throw new ArgumentNullException(nameof(rollTheDice));
         _topLevel = topLevel ?? throw new ArgumentNullException(nameof(topLevel));
         _initialDirectoryFromSettings = initialDirectoryFromSettings ?? throw new ArgumentNullException(nameof(initialDirectoryFromSettings));
-        AboutWindowCommand = ReactiveCommand.Create(AboutWindowCommandAction);
-        BrowseInitialDirectoryCommand = ReactiveCommand.Create(BrowseInitialDirectoryCommandAction);
+        AboutWindowCommand = ReactiveCommand.CreateFromTask(AboutWindowCommandAction);
+        BrowseInitialDirectoryCommand = ReactiveCommand.CreateFromTask(BrowseInitialDirectoryCommandAction);
         ThrowTheDiceCommand = ReactiveCommand.CreateFromTask(ThrowTheDiceCommandAction);
     }
 }
