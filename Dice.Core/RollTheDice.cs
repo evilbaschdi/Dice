@@ -29,9 +29,9 @@ public class RollTheDice : IRollTheDice
     }
 
     /// <inheritdoc />
-    public async Task<string> ValueAsync()
+    public async Task<string> ValueAsync(CancellationToken cancellationToken = default)
     {
-        var path = await _dicePath.ValueForAsync(_initialDirectoryFromSettings.Value);
+        var path = await _dicePath.ValueForAsync(_initialDirectoryFromSettings.Value, cancellationToken);
 
         _pathClickCounter.TryAdd(path, 1);
 

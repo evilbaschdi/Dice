@@ -18,7 +18,7 @@ public class DicePath : IDicePath
     }
 
     /// <inheritdoc />
-    public async Task<string> ValueForAsync(string initialDirectory)
+    public async Task<string> ValueForAsync(string initialDirectory, CancellationToken cancellationToken = default)
     {
         return initialDirectory == null
             ? throw new ArgumentNullException(nameof(initialDirectory))
@@ -33,6 +33,6 @@ public class DicePath : IDicePath
                                  var index = RandomNumberGenerator.GetInt32(0, folderList.Count);
 
                                  return folderList[index];
-                             });
+                             }, cancellationToken);
     }
 }
