@@ -1,0 +1,44 @@
+<!-- ReSharper disable once Xaml.PathError -->
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                       xmlns:viewModels="clr-namespace:Dice.Avalonia.ViewModels"
+                       xmlns:avalonia="clr-namespace:EvilBaschdi.About.Avalonia;assembly=EvilBaschdi.About.Avalonia"
+                       xmlns:evilBaschdi="clr-namespace:EvilBaschdi.Core.Avalonia.Controls;assembly=EvilBaschdi.Core.Avalonia"
+                       x:Class="Dice.Avalonia.MainWindow"
+                       x:DataType="viewModels:MainWindowViewModel" ShowAsDialog="true"
+                       mc:Ignorable="d" Width="500" Height="250" Title="Dice" CanResize="False">
+
+    <Panel Name="RootPanel">
+
+        <!-- ReSharper disable once Xaml.PathError -->
+        <evilBaschdi:TitleBarControl Icon="/Assets/plainicon.ico" Name="TitleBarControl" />
+
+        <Panel Name="MainPanel" Margin="0,30,0,7">
+            <Grid RowDefinitions="*,46">
+                <Panel Grid.Row="0" Name="ContentPanel" Margin="0">
+                    <!-- Browse -->
+                    <Label Width="35" Margin="7,13,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Path" />
+                    <TextBox x:Name="InitialDirectory" Margin="50,7,115,0" VerticalAlignment="Top" LostFocus="InitialDirectoryOnLostFocus" VerticalContentAlignment="Center" />
+                    <!-- ReSharper disable once UnusedMember.Global -->
+                    <Button Name="Browse" Margin="0,7,7,0" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseClick" Width="100" Height="32">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center" Text="browse" />
+                        </StackPanel>
+                    </Button>
+                    <!-- throw the dice -->
+                    <!-- ReSharper disable once Xaml.StyleClassNotFound -->
+                    <Button Name="ThrowTheDice" Command="{Binding ThrowTheDiceCommand}" Margin="7,47,7,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                            PointerPressed="ThrowTheDiceOnPointerPressed" ToolTip.Tip="{Binding ThrowTheDiceResultPath}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="ThrowTheDiceContent" VerticalAlignment="Center" Text="{Binding ThrowTheDiceContentText}" />
+                        </StackPanel>
+                    </Button>
+                </Panel>
+                <avalonia:AboutFooter Grid.Row="1" />
+            </Grid>
+        </Panel>
+    </Panel>
+</windowing:FAAppWindow>

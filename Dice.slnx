@@ -1,4 +1,4 @@
-<Solution>
+﻿<Solution>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
@@ -10,7 +10,11 @@
     <File Path="NuGet.config" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="Dice.Avalonia/Dice.Avalonia.csproj" />
-  <Project Path="Dice.Core.Tests/Dice.Core.Tests.csproj" />
-  <Project Path="Dice.Core/Dice.Core.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/Dice.Avalonia/Dice.Avalonia.csproj" />
+    <Project Path="src/Dice.Core/Dice.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Dice.Core.Tests/Dice.Core.Tests.csproj" />
+  </Folder>
 </Solution>
