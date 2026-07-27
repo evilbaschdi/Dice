@@ -1,40 +1,27 @@
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Dice.Avalonia.ViewModels;
 using EvilBaschdi.Core.Avalonia.DependencyInjection;
-using EvilBaschdi.Core.Avalonia.Themes;
+using EvilBaschdi.Core.Avalonia.Lifetime;
 
 namespace Dice.Avalonia;
 
 /// <inheritdoc />
-public class App : Application
+/// <inheritdoc />
+public class App : ApplicationWithSplash
 {
     /// <inheritdoc />
-    public override void Initialize()
+    public override void Initialize() => AvaloniaXamlLoader.Load(this);
+
+    /// <inheritdoc />
+    protected override void PreMainWindowCreation()
     {
-        AvaloniaXamlLoader.Load(this);
+        ApplicationServices.AppName = Current?.Name;
     }
 
     /// <inheritdoc />
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            ThemeEngine.Initialize(this);
-
-            // Line below is needed to remove Avalonia data validation.
-            // Without this line you will get duplicate validations from both Avalonia and CT
-            var mainWindow = new MainWindow
-                             {
-                                 DataContext = ApplicationServices.GetRequiredService<MainWindowViewModel>()
-                             };
-
-            ThemeEngine.ApplyThemeToWindow(mainWindow, false);
-
-            desktop.MainWindow = mainWindow;
-        }
-
-        base.OnFrameworkInitializationCompleted();
-    }
+    protected override Window CreateMainWindow() => new MainWindow
+                                                    {
+                                                        DataContext = ApplicationServices.GetRequiredService<MainWindowViewModel>()
+                                                    };
 }
