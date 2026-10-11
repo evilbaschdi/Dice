@@ -5,21 +5,20 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
-    <PackageVersion Include="EvilBaschdi.About.Avalonia" Version="2026.7.29.16" />
-    <PackageVersion Include="EvilBaschdi.Core" Version="2026.6.18.15" />
-    <PackageVersion Include="EvilBaschdi.Core.Avalonia" Version="2026.8.3.15" />
-    <PackageVersion Include="EvilBaschdi.Core.DependencyInjection" Version="2026.7.14.17" />
-    <PackageVersion Include="EvilBaschdi.Core.Settings" Version="2026.7.14.17" />
+    <PackageVersion Include="EvilBaschdi.About.Avalonia" Version="2026.10.4.7" />
+    <PackageVersion Include="EvilBaschdi.Core" Version="2026.8.21.10" />
+    <PackageVersion Include="EvilBaschdi.Core.Avalonia" Version="2026.10.9.14" />
+    <PackageVersion Include="EvilBaschdi.Core.DependencyInjection" Version="2026.9.8.21" />
+    <PackageVersion Include="EvilBaschdi.Core.Settings" Version="2026.9.8.21" />
   </ItemGroup>
   <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
-    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
-    <PackageVersion Include="EvilBaschdi.Testing" Version="2026.8.8.16" />
-    <PackageVersion Include="FluentAssertions.Analyzers" Version="0.34.1" />
-    <PackageVersion Include="Meziantou.FluentAssertionsAnalyzers" Version="1.0.22" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageVersion Include="coverlet.collector" Version="10.1.0" />
+    <PackageVersion Include="EvilBaschdi.Testing" Version="2026.10.9.17" />
+    <PackageVersion Include="AwesomeAssertions.Analyzers" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
-    <PackageVersion Include="xunit.v3.mtp-v2" Version="3.2.2" />
-    <PackageVersion Include="xunit.analyzers" Version="1.27.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="xunit.analyzers" Version="2.2.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
   </ItemGroup>
 </Project>

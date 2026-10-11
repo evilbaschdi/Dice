@@ -1,4 +1,4 @@
-#pragma warning disable FluentAssertions0704
+#pragma warning disable AwesomeAssertions0704
 #pragma warning disable MFA001
 namespace Dice.Core.Tests;
 

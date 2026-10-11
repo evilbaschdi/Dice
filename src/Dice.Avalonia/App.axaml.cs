@@ -7,7 +7,6 @@ using EvilBaschdi.Core.Avalonia.Lifetime;
 namespace Dice.Avalonia;
 
 /// <inheritdoc />
-/// <inheritdoc />
 public class App : ApplicationWithSplash
 {
     /// <inheritdoc />
