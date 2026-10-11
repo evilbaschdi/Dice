@@ -64,7 +64,7 @@ public class DicePath : IDicePath
     }
 
     /// <summary>
-    /// Clears the cache entry for a specific directory
+    ///     Clears the cache entry for a specific directory
     /// </summary>
     public void InvalidateCache(string path)
     {
@@ -75,7 +75,7 @@ public class DicePath : IDicePath
     }
 
     /// <summary>
-    /// Clears all cached directory listings
+    ///     Clears all cached directory listings
     /// </summary>
     public void ClearCache()
     {
